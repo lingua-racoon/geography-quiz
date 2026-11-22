@@ -1,6 +1,17 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e5a6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="共テ地理">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>共テ地理 都市クイズ</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
@@ -125,6 +136,7 @@ p{margin:0 0 10px}
 .legend i{display:inline-block; width:12px; height:12px; vertical-align:-1px; margin-right:6px; border-radius:2px}
 .legend .d{background:var(--pin); border-radius:50%}
 .legend .c{background:var(--hit)}
+.legend .rv{background:#1f6fd6; height:3px; width:18px; vertical-align:3px; border-radius:2px}
 .legend .l{background:transparent; border-top:2px dotted var(--border); height:0; width:18px; vertical-align:3px; border-radius:0}
 .traits{margin:0; display:grid; grid-template-columns:5.2em 1fr; gap:0}
 .traits dt, .traits dd{margin:0; padding:10px 0; border-bottom:1px solid var(--line)}
@@ -168,6 +180,8 @@ p{margin:0 0 10px}
 .miss b{font-family:var(--display); font-size:18px}
 .miss span{color:var(--muted); text-align:right}
 </style>
+</head>
+<body>
 
 <div class="wrap">
 
@@ -758,6 +772,7 @@ var COUNTRIES = [
 {"n":"バヌアツ","r":"ばぬあつ","i":"VUT","a":"オセアニア","g":"oc","cap":"ポートビラ","la":-17.73,"lo":168.32,"p":"約33万人","re":"キリスト教が多い","ind":"農業(コプラ・カバ)・観光","cl":["Af","熱帯雨林気候"],"hi":"英仏の共同統治領から、1980年に独立","pt":["南太平洋(メラネシア)の島国","英語・フランス語・ビスラマ語(ピジン英語)の3つが公用語","メラネシア系の住民が大多数(約9割)"]}
 ];
 var BIGCITY = {"中国": "上海", "ベトナム": "ホーチミン", "インド": "ムンバイ(都市圏ではデリーも最大級)", "パキスタン": "カラチ", "スリランカ": "コロンボ", "カザフスタン": "アルマトイ", "トルコ": "イスタンブール", "アラブ首長国連邦": "ドバイ", "スイス": "チューリッヒ", "ナイジェリア": "ラゴス", "南アフリカ": "ヨハネスブルク", "モロッコ": "カサブランカ", "タンザニア": "ダルエスサラーム", "コートジボワール": "アビジャン", "アメリカ合衆国": "ニューヨーク", "カナダ": "トロント", "トリニダード・トバゴ": "", "ブラジル": "サンパウロ", "ボリビア": "サンタクルス", "エクアドル": "グアヤキル", "オーストラリア": "シドニー", "ニュージーランド": "オークランド"};
+var RIVERS = {"黄河":[[96,35],[98,34.9],[100.5,34],[102,33.5],[102.7,35],[103.8,36.1],[105.2,37.5],[106,38.2],[106.8,39.5],[108.5,40.7],[110.2,40.6],[111.1,39.3],[110.8,37.5],[110.5,35.8],[110.4,34.6],[111.2,34.8],[112.5,34.9],[113.6,34.95],[114.4,34.9],[115.8,35.9],[117,36.7],[118.2,37.4],[118.9,37.7]],"長江":[[91,33.5],[94,33.4],[97,32.9],[98.7,31.6],[99.1,29],[100.2,27],[101.6,26.6],[103,26.7],[104.6,28.8],[106.5,29.6],[108.5,30.7],[111.3,30.7],[112.2,30.3],[113.3,29.6],[114.3,30.6],[116,29.7],[117.3,30.5],[118.8,32.1],[120.5,31.9],[121.9,31.4]],"ガンジス川":[[79,31],[78.3,30.1],[78.4,29.4],[79.7,27.7],[80.35,26.45],[81.85,25.4],[83,25.3],[85.1,25.6],[87.9,24.8],[89,24.1],[90.5,23.5],[90.9,22.4]],"インダス川":[[81.5,31.2],[79.5,32.8],[77.6,34.1],[75.6,35.3],[74.2,35.6],[72.9,34.9],[72.7,34.1],[72.25,33.9],[71.6,32.9],[70.9,31.8],[70.3,29.2],[69,27.8],[68.4,25.4],[67.6,24.2]],"アマゾン川":[[-73,-13],[-73.7,-9],[-73.5,-5],[-72.5,-4],[-70,-4.2],[-66,-3.2],[-60,-3.1],[-57,-2.5],[-54.7,-2.4],[-52,-1.6],[-50.4,-0.5]],"マーレー川":[[148.1,-36.7],[146.9,-36.1],[144.7,-36.1],[143.6,-35.3],[142.2,-34.2],[140.75,-34.2],[139.7,-34],[139.3,-35.1],[139,-35.45]]};
 var ANS_ORDER = ["アジア","ヨーロッパ","アフリカ","北アメリカ","南アメリカ","オセアニア"];
 var COUNTRY_ITEMS = COUNTRIES.map(function(c){ return {n:c.n, r:c.r, c:c.a, i:c.i, g:c.g, la:c.la, lo:c.lo, k:"国", alt:c.alt||[], big:(BIGCITY.hasOwnProperty(c.n) ? BIGCITY[c.n] : "首都と同じ"), pin:c.cap, cap:c.cap, p:c.p, re:c.re, ind:c.ind, cl:c.cl, hi:c.hi, pt:c.pt, src:[]}; });
 
@@ -980,7 +995,7 @@ function renderExplain(city, right, picked){
     '<div class="explain">' + verdict +
     '<h3>位置 <small>' + esc(reg.n) + 'の拡大地図</small></h3>' +
     '<div class="map-wrap"><div class="map" id="map"></div></div>' +
-    '<p class="legend"><span><i class="d"></i>' + (isC ? '首都 ' + esc(city.cap) : esc(city.n)) + '</span><span><i class="c"></i>' + (isC ? esc(city.n) : esc(city.c)) + '</span><span><i class="l"></i>国境線</span></p>' +
+    '<p class="legend"><span><i class="d"></i>' + (isC ? '首都 ' + esc(city.cap) : esc(city.n)) + '</span><span><i class="c"></i>' + (isC ? esc(city.n) : esc(city.c)) + '</span><span><i class="l"></i>国境線</span>' + (RIVERS[city.n] ? '<span><i class="rv"></i>河川の流路(概略)</span>' : '') + '</p>' +
     '<div class="layers" id="q-layers"></div>' +
     '<h3>' + (isC ? "国の特色" : city.k==="都市" ? "都市の特色" : "地名の特色") + '</h3>' +
     '<dl class="traits">' + traitRows(city) + '</dl>' +
@@ -1074,6 +1089,15 @@ function buildMap(box, regionKey, city){
 function addPin(ctx){
   var city = ctx.city, svg = ctx.svg;
   var old = svg.querySelector(".pin-g"); if(old) svg.removeChild(old);
+  var oldR = svg.querySelector(".river-g"); if(oldR) svg.removeChild(oldR);
+  if(RIVERS[city.n]){
+    var rg = svgEl("g", {"class":"river-g"});
+    var rp = RIVERS[city.n].map(function(q){ return ctx.xy(q[0], q[1]); });
+    var rd = smoothD(rp);
+    rg.appendChild(svgEl("path", {d:rd, fill:"none", stroke:"#ffffff", "stroke-width":4.6, "stroke-opacity":0.7, "stroke-linecap":"round", "stroke-linejoin":"round"}));
+    rg.appendChild(svgEl("path", {d:rd, fill:"none", stroke:"#1f6fd6", "stroke-width":2.6, "stroke-linecap":"round", "stroke-linejoin":"round"}));
+    svg.appendChild(rg);
+  }
   var p = ctx.xy(city.lo, city.la), x = p[0], y = p[1];
   var g = svgEl("g", {"class":"pin-g"});
   g.appendChild(svgEl("circle", {cx:x, cy:y, r:9, "class":"pin-ring"}));
@@ -1338,5 +1362,5 @@ buildChips();
 refreshStart();
 })();
 </script>
-
-</body></html>
+</body>
+</html>
