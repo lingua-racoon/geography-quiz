@@ -178,6 +178,7 @@ p{margin:0 0 10px}
 body.nob .map .datamaps-subunit{stroke:none!important}
 body.nob .ov-border{display:none}
 .ln-lbl{font-family:var(--body); font-weight:700; font-size:11px; paint-order:stroke; stroke:var(--surface); stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+.theme-btn{position:fixed; top:calc(env(safe-area-inset-top,0px) + 8px); right:max(10px, env(safe-area-inset-right,0px)); z-index:50; padding:6px 12px; min-height:34px; font-size:13px; font-family:var(--body); color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:999px; cursor:pointer; opacity:.92}
 .legend-note{font-size:13px; color:var(--muted); margin:8px 0 0}
 .lsubt{font-size:13px; color:var(--muted); align-self:center}
 .lchip3{padding:4px 10px; font-size:13px; min-height:32px; display:inline-flex; align-items:center; gap:5px}
@@ -212,6 +213,7 @@ body.nob .ov-border{display:none}
 .miss span{color:var(--muted); text-align:right}
 </style>
 
+<button type="button" id="theme-btn" class="theme-btn" aria-label="表示モードを切り替える"></button>
 <div class="wrap">
 
   <!-- 開始画面 -->
@@ -1541,7 +1543,7 @@ function buildInsets(parent, baseCtx, key){
 var LAYER_BTNS = [["","分布なし"],["rel","宗教"],["lang","言語"],["fam","語族"],["eth","民族"],["agr","農業"],["mi","鉱工業"],["col","旧宗主国"],["grp","国家群"],["gni","一人当たりGNI"],["clim","気候区分"],["elev","標高"]];
 var LAYER_MAP = {lang:"lang", rel:"rel", eth:"eth", agr:"agr"};
 function mountLayers(root, getCtx){
-  var html = '<h3>分布を重ねる <small>ボタンを押すと地図に色で表示します　(版 1123-R)</small></h3><div class="bsw"><button type="button" class="chip lchip4" aria-pressed="true">国境線 表示中</button></div><div class="lchips">';
+  var html = '<h3>分布を重ねる <small>ボタンを押すと地図に色で表示します　(版 1123-S)</small></h3><div class="bsw"><button type="button" class="chip lchip4" aria-pressed="true">国境線 表示中</button></div><div class="lchips">';
   LAYER_BTNS.forEach(function(b){
     var off = false;
     html += '<button type="button" class="chip lchip' + (off ? ' off' : '') + '" data-l="' + b[0] + '" aria-pressed="false">' + b[1] + (off ? '<span class="n">準備中</span>' : '') + '</button>';
@@ -1701,5 +1703,25 @@ $("r-home").addEventListener("click", function(){ buildChips(); refreshStart(); 
 
 buildChips();
 refreshStart();
+/* ---------- ライト/ダーク切り替え ---------- */
+(function(){
+  var root = document.documentElement, btn = document.getElementById("theme-btn");
+  function stored(){ try{ return localStorage.getItem("geo-theme"); }catch(e){ return null; } }
+  function save(v){ try{ localStorage.setItem("geo-theme", v); }catch(e){} }
+  function effective(){
+    var t = root.getAttribute("data-theme");
+    if(t==="dark" || t==="light") return t;
+    return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  function label(){ btn.textContent = effective()==="dark" ? "ライトモードにする" : "ダークモードにする"; }
+  var s = stored(); if(s==="dark" || s==="light") root.setAttribute("data-theme", s);
+  label();
+  btn.addEventListener("click", function(){
+    var n = effective()==="dark" ? "light" : "dark";
+    root.setAttribute("data-theme", n); save(n); label();
+  });
+  if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", label); }catch(e){} }
+})();
+
 })();
 </script>
