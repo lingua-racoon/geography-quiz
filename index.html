@@ -171,6 +171,18 @@ p{margin:0 0 10px}
 .layers{margin-top:6px}
 .lchips{display:flex; flex-wrap:wrap; gap:8px}
 .lchip{padding:6px 12px; font-size:14px; min-height:36px}
+.lsub[hidden]{display:none}
+.lsub{margin-top:8px; padding-left:10px; border-left:3px solid var(--line,#ccc)}
+.bsw{margin:6px 0 10px}
+.lchip4{padding:4px 12px; font-size:13px; min-height:32px}
+body.nob .map .datamaps-subunit{stroke:none!important}
+body.nob .ov-border{display:none}
+.ln-lbl{font-family:var(--body); font-weight:700; font-size:11px; paint-order:stroke; stroke:var(--surface); stroke-width:3px; stroke-linejoin:round; pointer-events:none}
+.legend-note{font-size:13px; color:var(--muted); margin:8px 0 0}
+.lsubt{font-size:13px; color:var(--muted); align-self:center}
+.lchip3{padding:4px 10px; font-size:13px; min-height:32px; display:inline-flex; align-items:center; gap:5px}
+.cdot{display:inline-block; min-width:16px; height:16px; line-height:16px; border-radius:8px; color:#fff; font-size:10px; font-style:normal; font-weight:700; text-align:center}
+.lchip2{padding:4px 10px; font-size:13px; min-height:32px}
 .lchip.off{border-style:dashed; color:var(--muted)}
 .lbody{margin-top:10px}
 .lname{font-weight:700; margin:0 0 6px}
@@ -178,15 +190,9 @@ p{margin:0 0 10px}
 .llegend span{display:inline-flex; align-items:center; gap:6px; min-width:0}
 .llegend i{flex:none; display:inline-block; width:14px; height:14px; border-radius:3px; border:1px solid rgba(0,0,0,.18)}
 .llegend i.none{background:#fff}
-.llegend i.arrow{width:22px; height:0; border:0; border-top:3px solid var(--c); border-radius:0; position:relative}
-.llegend i.arrow::after{content:""; position:absolute; right:-3px; top:-6px; border-left:8px solid var(--c); border-top:4.5px solid transparent; border-bottom:4.5px solid transparent}
 .lsrc{font-size:12.5px; color:var(--muted); line-height:1.7; margin:10px 0 0}
 .lsrc b{color:var(--ink); margin-right:6px}
 .lsrc a{color:var(--accent); overflow-wrap:anywhere}
-.cur{fill:none; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
-.cur.w{stroke:#e0453a}
-.cur.c{stroke:#2f6fd0}
-.cur-lbl{font-family:var(--body); font-weight:700; font-size:11px; fill:var(--ink); paint-order:stroke; stroke:var(--sea); stroke-width:3px; stroke-linejoin:round}
 .ov-border{fill:none; stroke:var(--border); stroke-width:.9; stroke-dasharray:1.2 2.6; stroke-linecap:round}
 .srcs{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 4px}
 .src{font-size:12.5px; line-height:1.5; padding:2px 10px; border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--muted)}
@@ -265,7 +271,7 @@ p{margin:0 0 10px}
   <section id="screen-atlas" hidden>
     <p class="eyebrow">分布地図</p>
     <h1>地図で分布を見る</h1>
-    <p class="lead">地域を選び、宗教・言語・民族・農業・海流のボタンを押すと、地図に色で表示します。</p>
+    <p class="lead">地域を選び、宗教・言語・民族・農業などのボタンを押すと、地図に色で表示します。</p>
     <div class="chips" id="atlas-regions"></div>
     <div class="map-wrap" style="margin-top:14px"><div class="map" id="amap"></div></div>
     <div class="layers" id="atlas-layers"></div>
@@ -312,7 +318,8 @@ var REGIONS = {
   ch:{n:"スイス", c:[8.23,46.8], s:6800, h:400},
   es:{n:"スペイン", c:[-2.5,40], s:2400, h:520},
   la:{n:"中南アメリカ",c:[-76,-17], s:370, h:680},
-  oc:{n:"オセアニア",  c:[152,-28], s:430, h:440}
+  oc:{n:"オセアニア",  c:[152,-28], s:430, h:440},
+  wd:{n:"世界全体",    c:[10,34],   s:95,  h:350}
 };
 var REGION_ORDER = ["ea","sea","sas","cas","wa","ru","eu","af","na","la","oc"];
 var NEAR = {
@@ -576,12 +583,14 @@ var LAYERS = {
       ["ir","ペルシア・トルコ・中央アジア系","#4caf6a"],["ea","東アジア系(漢・モンゴル・日本・朝鮮など)","#e0405d"],
       ["se","東南アジア系(マレー・タイ・ビルマなど。マダガスカルを含む)","#5fbfd6"],["in","インド系(インド・アーリア系)","#b9722f"],["dr","ドラヴィダ系","#d69a4a"],
       ["af","アフリカ系(黒人)","#8a6d3b"],["mz","混血(メスチーソ・ムラートなど)","#d9534f"],
-      ["oc","先住民・オセアニア系(メラネシア・ポリネシアなど)","#4a8fe0"],["je","ユダヤ系","#9aa3ad"]],
+      ["oc","先住民・オセアニア系(メラネシア・ポリネシアなど)","#4a8fe0"],["je","ユダヤ系","#9aa3ad"],["ku","クルド系(トルコ・イラク・イラン・シリアにまたがる)","#7d1b4d"],["am","アルメニア系","#3b3b98"],["ce","ケルト系(アイルランド・スコットランド・ウェールズ・コーンウォール・ブルターニュ・ガリシア)","#1f7a3a"]],
     base:{
-      ge:"USA CAN AUS NZL GBR IRL DEU AUT CHE NLD BEL LUX DNK NOR SWE ISL LIE FRO FLK",
+      ge:"USA CAN AUS NZL GBR DEU AUT CHE NLD BEL LUX DNK NOR SWE ISL LIE FRO FLK",
       la:"FRA ITA ESP PRT ROU MDA ARG URY CRI AND SMR",
       sl:"RUS UKR BLR POL CZE SVK SVN HRV SRB BIH MNE MKD BGR",
-      eo:"GRC ALB LTU LVA EST FIN HUN GEO ARM CYP XKX KOS MLT",
+      eo:"GRC ALB LTU LVA EST FIN HUN GEO CYP XKX KOS MLT",
+      am:"ARM",
+      ce:"IRL",
       ar:"SAU YEM OMN ARE QAT BHR KWT IRQ SYR JOR LBN PSE EGY LBY TUN DZA MAR ESH MRT SDN",
       ir:"IRN TUR AZE UZB TKM KAZ KGZ TJK AFG",
       ea:"CHN JPN KOR PRK TWN HKG MAC MNG BTN SGP",
@@ -597,7 +606,7 @@ var LAYERS = {
       ["IND","dr",[[74,17.5],[76.5,19.5],[79.5,19.5],[81,18.8],[84.2,19.2],[80.5,13],[80,9],[77.5,7.8],[76.2,8.7],[74.8,12.5],[73.8,15.5]]],
       ["LKA","dr",[[79.8,9.2],[80.4,9.9],[81.6,9.8],[81.8,8.9],[81,8],[80.2,8.3]]],
       ["PER","oc",[[-78.2,-7.5],[-76,-10],[-74,-13],[-71.5,-15.5],[-69.3,-16.5],[-69.8,-14.5],[-72,-12],[-74.5,-9],[-77.5,-6.5]]],["BOL","oc",[[-69.5,-15.5],[-67.5,-15],[-65.5,-17],[-63.5,-18.5],[-64,-21],[-66.5,-21.8],[-68,-20.5],[-68.7,-18],[-69.4,-16.8]]],
-      ["CHN","ir",[[73.5,39.5],[80,45],[85,49],[90,47],[96,42.5],[96,39],[91,36.5],[86,35.5],[79,35.5],[75,37]]]
+      ["CHN","ir",[[73.5,39.5],[80,45],[85,49],[90,47],[96,42.5],[96,39],[91,36.5],[86,35.5],[79,35.5],[75,37]]],["TUR","ku",[[37.5,38.8],[39,39.4],[41,39.6],[43.5,40.2],[44.8,39.7],[44.5,37.2],[42.3,37.1],[40,36.9],[38,36.7]]],["IRQ","ku",[[41.2,37.2],[43.5,37.4],[45,36.9],[46.2,35.5],[45.8,34.5],[44.6,34.3],[43.8,35.3],[42.5,35.8],[41.2,36.3]]],["IRN","ku",[[44,39.6],[45.2,38.9],[46.5,37.6],[47.5,36.2],[48.2,35],[48.2,33.8],[46.5,33.3],[45.5,34.3],[44.8,35.5],[44.1,36.8],[44.2,38.2]]],["SYR","ku",[[38.8,36.9],[40.5,37.2],[42.4,37.2],[42.2,36.6],[41,36.4],[40,36.3],[38.8,36.5]]],["GEO","am",[[43.2,41.75],[44.1,41.75],[44.1,41.2],[43.2,41.2]]],["GBR","ce",[[-8,58.8],[-1,59.2],[-1.5,57.3],[-1.9,56.2],[-1.95,55.8],[-2.7,55.3],[-3.05,54.95],[-3.4,54.7],[-6.5,54.6],[-8,55.5]]],["GBR","ce",[[-8.2,54.0],[-5.4,54.0],[-5.4,55.4],[-8.2,55.4]]],["GBR","ce",[[-5.5,51.3],[-5.5,53.5],[-4.3,53.45],[-3.1,53.4],[-2.9,52.8],[-2.6,52.3],[-2.7,51.8],[-2.65,51.55],[-3.0,51.4]]],["GBR","ce",[[-6.4,49.8],[-5.8,50.7],[-4.2,50.9],[-4.2,50.6],[-4.35,50.3],[-4.9,50.0]]],["FRA","ce",[[-5.3,48.9],[-1.9,48.9],[-1.2,48.4],[-1.1,47.5],[-2.1,47.3],[-4.8,47.5],[-5.3,48.0]]],["ESP","ce",[[-9.4,43.8],[-7.0,43.7],[-6.8,43.0],[-6.9,42.2],[-7.1,41.9],[-8.1,41.85],[-8.9,41.9],[-9.4,42.8]]]
     ],
     src:[
       ["Wikipedia「List of countries by ethnic groups」(各国の統計などを集めた一覧。最大の集団で分類)","https://en.wikipedia.org/wiki/List_of_countries_by_ethnic_groups"]],
@@ -638,7 +647,7 @@ var LAYERS = {
       ["CHN","ph",[[106,34],[120,34],[124,40],[135,43],[135,48.5],[122,53.5],[116,48],[110,42],[106,38]]],
       ["CHN","no",[[73,36],[80,45],[87,49],[97,43],[105,40],[101,34],[98,28],[90,27],[80,30]]],
       ["CHN","no",[[97,41],[106,41],[117,43],[123,47],[118,50],[111,45],[103,42]]],
-      ["DZA","md",[[-1.5,35.5],[0,36.2],[3,36.8],[6,36.9],[8.5,36.9],[8.3,36],[6,35.5],[3,35.2],[0,34.8],[-1.5,34.7]]],["LBY","md",[[10.5,32.7],[14,32.9],[15.5,32.4],[13,32],[10.7,32.1]]],["LBY","md",[[20,32.3],[22.5,32.9],[23.6,32.4],[22,31.8]]]
+      ["DZA","md",[[-1.5,35.5],[0,36.2],[3,36.8],[6,36.9],[8.5,36.9],[8.3,36],[6,35.5],[3,35.2],[0,34.8],[-1.5,34.7]]],["LBY","md",[[10.5,32.7],[14,32.9],[15.5,32.4],[13,32],[10.7,32.1]]],["LBY","md",[[20,32.3],[22.5,32.9],[23.6,32.4],[22,31.8]]],["AUS","pl",[[145.2,-14.5],[146.4,-17],[148.5,-20.3],[150.6,-22.6],[152.6,-25],[153.3,-27.3],[152.2,-27.3],[150,-24.2],[147.4,-20.6],[145.5,-17.2],[144.7,-15.2]]],["AUS","da",[[143.4,-39.6],[149.6,-39.6],[149.6,-44.2],[143.4,-44.2]]],["AUS","md",[[114.9,-31.2],[116.2,-31.2],[116.1,-33.8],[115,-34.3],[114.9,-32.5]]],["AUS","md",[[138,-35.4],[139.3,-34.8],[139.2,-35.3],[138.2,-35.6]]],["IND","no",[[70,24.5],[70.6,27.6],[72.2,29.2],[74.6,28.6],[74.6,26],[73.4,24.6],[71.5,24.2]]],["SWE","tu",[[11.5,61.5],[17.5,61],[20,63.5],[24.2,66],[24.2,69.5],[11,69.5]]],["FIN","tu",[[21,61.8],[32,61.8],[32,70.5],[21,70.5]]],["CHN","oa",[[76,39.5],[80,41.2],[85,41.8],[88,41],[87,39.5],[83,37],[79,37.2],[77,38]]],["CHN","oa",[[94,40.2],[98,39.5],[102,38],[100.5,37.5],[97,38.8]]],["CHN","oa",[[80,43.5],[83,44.8],[86,44.3],[84,43]]]
     ],
     src:[],
     note:"農業地域の区分は、地理の教科書・地図帳にある農業地域の区分(酪農・混合農業・企業的穀物農業・地中海式農業など)を参考に、私が国ごと、主要な国は国内の地域ごとにまとめた概略です。提供いただいた教材「農林水産業」の地域別の記述(アメリカ合衆国の西経100度線、アルゼンチンのパンパ、ブラジルのセラード・北東部、ヨーロッパの酪農など)を反映しました。公的な統計表やデータ集からの引用ではありません。"
@@ -669,12 +678,6 @@ var LAYERS = {
     src:[["世界銀行 GNI per capita, Atlas method (current US$)(提供いただいたデータ)","https://data.worldbank.org/indicator/NY.GNP.PCAP.CD"]],
     nonetxt:"色なし(データなし:キューバ・イエメン・台湾など)",
     note:"2024年と2025年のうち新しい方の値を使い、小数第一位を四捨五入した整数で4段階に分けています。"
-  },
-  cur:{
-    label:"海流", kind:"current",
-    classes:[["w","暖流(赤の矢印)","#e0453a"],["c","寒流(青の矢印)","#2f6fd0"]],
-    src:[],
-    note:"海流の位置と向きは、教科書の世界の海流図を参考に私が描いた概略です。流れの経路は正確ではなく、季節で変わる海流(インド洋のモンスーン海流など)は省いています。"
   }
 };
 Object.keys(LAYERS).forEach(function(k){
@@ -682,36 +685,6 @@ Object.keys(LAYERS).forEach(function(k){
   if(L.base) Object.keys(L.base).forEach(function(c){ S(L.base[c]).forEach(function(iso){ L.map[iso] = c; }); });
 });
 LAYERS.agr.src = [];
-var CURRENTS = [
-  {n:"黒潮",t:"w",p:[[122.0,20.0],[122.8,21.8],[124.0,24.0],[125.9,26.1],[128.0,28.0],[129.9,29.5],[132.0,31.0],[134.5,32.0],[137.0,33.0],[139.1,34.0],[141.1,35.2],[143.4,36.0],[146.0,36.5],[149.3,37.6],[152.0,38.5]]},
-  {n:"対馬海流",t:"w",p:[[127.6,32],[128.2,33.4],[129.3,35],[131,36.3],[133.5,37.3],[136,38],[137.6,39.4],[139,41],[139.4,43.1],[140.9,44.4]]},
-  {n:"北太平洋海流",t:"w",p:[[152.0,38.5],[157.6,39.4],[165.0,40.5],[172.7,41.2],[179.9,42.0],[185.0,43.0],[190.1,44.0],[197.2,45.0],[205.0,46.0],[213.4,47.1],[220.0,48.0]]},
-  {n:"アラスカ海流",t:"w",p:[[-133,53],[-138,55.5],[-144,58.3],[-149,58.8],[-153,56.2],[-158,54.6],[-164,53.6]]},
-  {n:"北赤道海流",t:"w",p:[[250.0,12.0],[239.0,12.4],[225.1,13.0],[212.2,13.6],[200.1,14.0],[190.0,14.0],[179.9,14.0],[167.5,14.2],[155.1,14.5],[144.2,14.6],[135.1,14.5],[128.3,14.2],[124.6,14.4]]},
-  {n:"赤道反流",t:"w",p:[[135.0,6.0],[146.3,6.2],[159.8,6.5],[170.0,6.8],[180.1,7.0],[191.6,7.2],[205.1,7.5],[222.3,7.8],[240.0,8.0],[256.1,8.0],[268.0,8.0]]},
-  {n:"南赤道海流",t:"w",p:[[276,-3],[250,-3],[215,-4],[180,-5],[161,-5]]},
-  {n:"東オーストラリア海流",t:"w",p:[[152.0,-18.0],[152.4,-20.6],[153.0,-23.8],[153.9,-27.0],[154.5,-30.0],[154.2,-33.1],[153.5,-36.0],[152.2,-38.4],[151.0,-40.0]]},
-  {n:"メキシコ湾流",t:"w",p:[[-83,23.9],[-80.5,24.1],[-79.4,26.2],[-78.3,29.2],[-77,31],[-75.6,33],[-74,35],[-72.3,36.8],[-70,38.5],[-66.5,40.2],[-61.9,42],[-55.5,44],[-50,45.5]]},
-  {n:"北大西洋海流",t:"w",p:[[-50.0,45.5],[-44.6,47.1],[-38.1,49.0],[-32.9,50.5],[-28.0,52.0],[-23.0,53.7],[-18.0,55.5],[-13.2,57.2],[-7.9,59.0],[-1.9,60.9],[4.9,63.0],[10.0,66.1],[14.6,69.4],[21.7,71.1],[28.1,71.6]]},
-  {n:"北赤道海流",t:"w",p:[[-20.0,15.0],[-26.8,14.8],[-35.0,14.5],[-42.7,14.5],[-50.0,14.5],[-56.1,14.2],[-61.9,14.2],[-69.2,14.0],[-75.0,14.0]]},
-  {n:"南赤道海流",t:"w",p:[[5,-2],[-10,-4],[-25,-5],[-31,-6]]},
-  {n:"ブラジル海流",t:"w",p:[[-33.6,-8.1],[-35.5,-11.9],[-37.4,-14.3],[-37.9,-18.4],[-39.9,-22.9],[-43.5,-24.8],[-46.0,-27.1],[-48.3,-30.8],[-50.0,-34.0]]},
-  {n:"ギニア海流",t:"w",p:[[-10.0,5.0],[-7.1,3.6],[-4.0,4.2],[-0.4,4.4],[3.0,4.5],[5.9,3.7],[7.9,3.4]]},
-  {n:"南赤道海流",t:"w",p:[[110.0,-11.0],[101.2,-10.9],[90.0,-11.0],[79.7,-11.5],[70.1,-12.0],[61.9,-12.1],[55.0,-12.0],[49.1,-11.6],[45.0,-12.0]]},
-  {n:"アガラス海流",t:"w",p:[[40.0,-18.0],[38.0,-20.7],[36.0,-24.2],[33.8,-26.4],[32.9,-28.9],[30.6,-31.5],[28.3,-33.6],[25.1,-34.8],[22.0,-36.0],[19.1,-37.2],[17.0,-38.0]]},
-  {n:"親潮",t:"c",p:[[165.0,52.0],[161.8,51.2],[158.1,50.0],[155.4,48.1],[153.0,46.0],[150.5,44.4],[148.0,43.0],[145.3,41.5],[143.1,40.0],[142.2,38.3],[142.0,37.0]]},
-  {n:"リマン海流",t:"c",p:[[141.4,51.1],[141.1,50.6],[140.6,48.1],[139.6,47.1],[138.4,45.6],[137.2,44.6],[135.6,43.1],[133.3,42.1],[131.5,41.5]]},
-  {n:"カリフォルニア海流",t:"c",p:[[-127.0,48.0],[-126.7,45.8],[-126.0,43.0],[-124.8,40.5],[-123.1,37.4],[-121.6,35.2],[-119.4,32.6],[-117.0,30.5],[-115.2,28.0],[-112.9,25.1],[-111.0,23.0]]},
-  {n:"ペルー海流",t:"c",p:[[-74.0,-38.0],[-74.1,-34.5],[-74.0,-30.0],[-72.8,-26.0],[-72.1,-22.0],[-73.7,-18.1],[-76.6,-14.4],[-78.6,-10.5],[-80.8,-7.5],[-81.3,-4.6],[-82.0,-3.0],[-83.1,-2.3],[-84.0,-2.0]]},
-  {n:"ベンゲラ海流",t:"c",p:[[14.0,-34.0],[13.0,-31.4],[12.0,-28.0],[12.0,-25.0],[12.0,-22.0],[11.1,-19.0],[10.0,-16.0],[8.9,-12.6],[8.0,-10.0]]},
-  {n:"カナリア海流",t:"c",p:[[-12.0,40.0],[-12.8,37.4],[-14.0,34.0],[-15.6,31.0],[-17.4,28.1],[-17.6,25.0],[-18.0,22.0],[-18.4,18.9],[-19.0,16.0],[-20.6,13.6],[-22.0,12.0]]},
-  {n:"ラブラドル海流",t:"c",p:[[-65.9,65.4],[-62.6,62.3],[-60,58.1],[-57.2,55.1],[-53,52.8],[-51.5,50.5],[-50.5,47.5],[-51,43]]},
-  {n:"東グリーンランド海流",t:"c",p:[[-10,78],[-14,74],[-19,70.5],[-26,67.5],[-33,65],[-40,62.5],[-43,58.3]]},
-  {n:"西オーストラリア海流",t:"c",p:[[112.0,-35.0],[111.5,-32.8],[111.0,-30.0],[110.9,-27.5],[111.0,-25.0],[111.5,-22.2],[112.0,-20.0]]},
-  {n:"フォークランド海流",t:"c",p:[[-57.9,-51.4],[-59.1,-49.8],[-59.9,-47.0],[-59.4,-44.4],[-58.0,-42.0],[-55.9,-39.7],[-54.0,-38.0]]},
-  {n:"西風皮流(南極環流)",t:"c",p:[[0,-52],[27,-51.9],[60,-52],[90,-52.4],[120,-53],[150,-53.5],[180,-54],[210,-54.5],[240,-55],[270,-56],[300,-58],[333,-56],[360,-53]]}
-];
-
 /* ---------- 国データ(国名→地域モード) ----------
    n:国名 r:読み i:地図用コード a:答え(地域) g:地図の地域 cap:首都 la/lo:首都の緯度経度 */
 var COUNTRIES = [
@@ -838,6 +811,59 @@ function gniCls(v){ return v<=1175 ? 0 : v<=4635 ? 1 : v<=14375 ? 2 : 3; }
   Object.keys(LAYERS).forEach(function(k){ var L = LAYERS[k]; if(!L.map || k==="gni") return;
     if(L.map.CYP && !L.map.CYN) L.map.CYN = ov[k] || L.map.CYP; });
 })();
+var GROUPS = {"EU": {"name": "EU(ヨーロッパ連合)", "o": ["BEL", "LUX", "NLD", "ITA", "FRA", "DEU"], "m": ["AUT", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "GRC", "HUN", "IRL", "LVA", "LTU", "MLT", "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"], "x": ["GBR"]}, "EFTA": {"name": "EFTA(ヨーロッパ自由貿易連合)", "o": ["NOR", "CHE"], "m": ["ISL", "LIE"], "x": ["GBR", "DNK", "SWE", "AUT", "PRT", "FIN"]}, "NATO": {"name": "NATO(北大西洋条約機構)", "o": ["BEL", "CAN", "DNK", "FRA", "ISL", "ITA", "LUX", "NLD", "NOR", "PRT", "GBR", "USA"], "m": ["GRC", "TUR", "DEU", "ESP", "CZE", "HUN", "POL", "BGR", "EST", "LVA", "LTU", "ROU", "SVK", "SVN", "ALB", "HRV", "MNE", "MKD", "FIN", "SWE"], "x": []}, "ASEAN": {"name": "ASEAN(東南アジア諸国連合)", "o": ["THA", "MYS", "SGP", "PHL", "IDN"], "m": ["BRN", "VNM", "MMR", "LAO", "KHM", "TLS"], "x": []}, "OECD": {"name": "OECD(経済協力開発機構)", "o": ["AUT", "BEL", "DNK", "FRA", "DEU", "GRC", "ISL", "IRL", "ITA", "LUX", "NLD", "NOR", "PRT", "ESP", "SWE", "CHE", "TUR", "GBR", "USA", "CAN"], "m": ["JPN", "FIN", "AUS", "NZL", "MEX", "CZE", "HUN", "POL", "KOR", "SVK", "CHL", "SVN", "ISR", "EST", "LVA", "LTU", "COL", "CRI"], "x": []}, "OPEC": {"name": "OPEC(石油輸出国機構)", "o": ["IRN", "IRQ", "KWT", "SAU", "VEN"], "m": ["LBY", "ARE", "DZA", "NGA", "GAB", "GNQ", "COG"], "x": ["QAT", "ECU", "AGO", "IDN"]}, "OAPEC": {"name": "OAPEC(アラブ石油輸出国機構)", "o": ["SAU", "KWT", "LBY"], "m": ["DZA", "BHR", "EGY", "ARE", "IRQ", "QAT", "SYR"], "x": []}, "CIS": {"name": "CIS(独立国家共同体)", "o": ["RUS", "BLR", "KAZ", "UZB", "KGZ", "TJK", "TKM", "ARM", "AZE", "MDA"], "m": [], "x": ["UKR", "GEO"]}, "USMCA": {"name": "USMCA(米国・メキシコ・カナダ協定)", "o": ["USA", "CAN", "MEX"], "m": [], "x": []}, "MERCOSUR": {"name": "MERCOSUR(南米南部共同市場)", "o": ["ARG", "BRA", "PRY", "URY"], "m": ["BOL"], "x": ["VEN"]}, "APEC": {"name": "APEC(アジア太平洋経済協力)", "o": ["AUS", "BRN", "CAN", "IDN", "JPN", "KOR", "MYS", "NZL", "PHL", "SGP", "THA", "USA"], "m": ["CHN", "TWN", "MEX", "PNG", "CHL", "PER", "RUS", "VNM"], "x": []}, "AU": {"name": "AU(アフリカ連合)", "o": ["DZA", "AGO", "BEN", "BWA", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "COD", "CIV", "DJI", "EGY", "GNQ", "ERI", "SWZ", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "LBY", "MDG", "MWI", "MLI", "MRT", "MUS", "MOZ", "NAM", "NER", "NGA", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SDN", "TZA", "TGO", "TUN", "UGA", "ZMB", "ZWE"], "m": ["MAR", "SSD"], "x": []}, "CPTPP": {"name": "CPTPP(環太平洋パートナーシップ)", "o": ["AUS", "BRN", "CAN", "CHL", "JPN", "MYS", "MEX", "NZL", "PER", "SGP", "VNM"], "m": ["GBR"], "x": []}};
+var GRP_ORDER = ["EU","EFTA","NATO","OECD","OPEC","OAPEC","CIS","USMCA","MERCOSUR","APEC","AU","CPTPP","ASEAN"];
+var GRP_CLS = [["o","原加盟国","#1b5fb8"],["m","その他の加盟国","#7db4ea"],["x","脱退・資格停止","#e79a4b"]];
+LAYERS.grp = {label:"国家群", kind:"area", classes:GRP_CLS, map:{}, nonetxt:"非加盟国(色なし)"};
+var lastGroup = "EU";
+function setGroup(g){
+  var d = GROUPS[g], L = LAYERS.grp; L.map = {}; L.label = d.name;
+  ["o","m","x"].forEach(function(c){ d[c].forEach(function(iso){ L.map[iso] = c; }); });
+  L.classes = GRP_CLS.filter(function(c){ return d[c[0]].length; });
+  lastGroup = g;
+}
+setGroup("EU");
+var CROPS = [{"k": "tea", "n": "茶", "s": "茶", "c": "#2e9e4f", "p": [[94.5, 27], [88.3, 27], [76.7, 11.4], [80.7, 7.1], [35.3, -0.4], [100.5, 22.5], [120, 30], [118, 26], [103, 30], [114, 30.5], [138, 35], [105, 21.5], [107.5, -7], [40.5, 41], [35, -16], [-55, -27], [102, 26.3], [91.5, 25]]}, {"k": "cof", "n": "コーヒー", "s": "コ", "c": "#7a4a2a", "p": [[-47, -21.5], [-45, -19], [-42, -19.5], [-50, -23.5], [-75.5, 5], [108, 12.7], [98.5, 3], [103, -4], [120, -3], [37, 7.5], [37, -0.5], [32, 1], [35, -3.5], [-5.5, 6.5], [-90.5, 14.8], [-92.5, 16.5], [-84, 10], [-87, 14.5], [-75, -11], [44, 14], [76, 12.5], [48, -18], [145, -6], [-79, -1.5], [106, 15]]}, {"k": "cac", "n": "カカオ", "s": "カ", "c": "#5b2a86", "p": [[-5, 6.5], [-1.5, 6.5], [5, 6.8], [11.5, 4], [120.5, -2.5], [-79.5, -2], [-39, -14.5], [-70, 19], [-76, -8], [-73, 7], [-66, 10], [-93, 18], [147, -6.5], [49, -14], [76.5, 10], [6.7, 0.3], [117, 5.2]]}, {"k": "ban", "n": "バナナ", "s": "バ", "c": "#d6b800", "p": [[-79.7, -2.5], [-83.5, 10], [125.5, 7], [-46, -23.5], [-40, -6], [75, 15], [78, 10], [-74.5, 10.5], [-89, 15.5], [-87.5, 15.5], [-82.5, 8.5], [32, 0.5], [37, -3.5], [9.7, 4.2], [-4, 5.5], [100, 14], [106, 10.5], [110, -7.5], [120.5, 23], [146, -17.5], [-93, 17.5], [-77.3, 18.1]]}, {"k": "rub", "n": "天然ゴム", "s": "ゴ", "c": "#4a4a4a", "p": [[100.5, 7.5], [103, 16], [102, 4.5], [103, -2], [100.5, 0.5], [112, -2], [107, 11.5], [106, 12.5], [103, 19], [80.3, 6.8], [76.5, 9.5], [-9.5, 6.5], [6, 6.5], [-6, 5.5], [109.7, 19.2], [97.5, 16.5], [98, 12]]}, {"k": "oil", "n": "油やし", "s": "油", "c": "#e07a1f", "p": [[102.5, 3.5], [117, 5], [101.5, 1], [104, -2.5], [111, -1.5], [7, 5.5], [-2, 5.5], [10.5, 4], [24, 0], [11.5, -0.5], [-4.5, 5.5], [-73.5, 8], [-79.5, 0.5], [-48, -2], [99, 8], [150.5, -5.5], [-87, 15.5], [-83.5, 9.5], [2.5, 7], [14, -8]]}, {"k": "coc", "n": "ココやし", "s": "ヤ", "c": "#1f8fb0", "p": [[125, 9], [122, 13.5], [110, -7.5], [96.5, 3], [80, 7.5], [76.3, 10], [99.5, 9.5], [145, -5], [167, -16], [178, -17.5], [35, -17], [39.3, -6.5], [-4, 5.2], [-38, -10], [-102, 17.5], [-150, -17.5], [173, 1.5], [73.5, 4], [-172, -13.6], [106.5, 10], [119, -1]]}, {"k": "sug", "n": "さとうきび", "s": "糖", "c": "#c2185b", "p": [[-48, -21.5], [-35.5, -8.5], [79, 27], [75, 18], [78.5, 11], [108.5, 23], [113, 23.5], [101, 24], [101, 15.5], [148, -20], [-79.5, 22], [-96.5, 19], [-76.4, 3.5], [72, 30.5], [123, 10.2], [112.5, -7.8], [57.5, -20.2], [31, -28.8], [32.7, 25.7], [-91.5, 30.2], [-80.8, 26.6], [-91, 14.2], [-65.2, -27], [-79, -7.5], [34.7, -0.1]]}, {"k": "cot", "n": "綿花", "s": "綿", "c": "#6a6ad0", "p": [[72, 22], [77, 20.5], [74.5, 30.5], [79, 16], [68.5, 26], [82, 41], [86, 44], [80, 38.5], [115, 36.5], [113, 34], [117, 31], [66, 40.5], [62, 41], [-101.5, 33.5], [-90.5, 33.5], [-120, 36.5], [-83.5, 31.8], [-112, 33], [-55, -13], [-45, -12.5], [31, 30.5], [35.5, 37], [150, -29.5], [-6, 12], [-3.5, 11.5], [-60, -27], [22.5, 39.5], [60, 38]]}, {"k": "jut", "n": "ジュート", "s": "ジ", "c": "#b8860b", "p": [[89.5, 23.7], [90.4, 24.5], [89, 25.5], [91, 23.5], [88, 23.5], [86.5, 25.8], [91, 26], [85.5, 20.5], [86, 26.5]]}];
+var cropSel = {};
+function drawMarks(ctx, list, sel){
+  var svg = ctx.svg, g = svgEl("g", {"class":"layer-ov", "style":"pointer-events:none"});
+  list.forEach(function(c){
+    if(!sel[c.k]) return;
+    c.p.forEach(function(q){
+      var a = ctx.xy(q[0], q[1]);
+      if(a[0]<6 || a[0]>ctx.w-6 || a[1]<6 || a[1]>ctx.h-6) return;
+      g.appendChild(svgEl("circle", {cx:a[0].toFixed(1), cy:a[1].toFixed(1), r:7, fill:c.c, stroke:"#fff", "stroke-width":1.2}));
+      var t = svgEl("text", {x:a[0].toFixed(1), y:(a[1]+3.6).toFixed(1), "text-anchor":"middle", "font-size":c.s.length>1?7:9, "font-weight":700, fill:"#fff"});
+      t.textContent = c.s; g.appendChild(t);
+    });
+  });
+  svg.appendChild(g);
+}
+var MINES = [{"k": "coal", "n": "石炭", "s": "炭", "c": "#3d3d3d", "p": [[-80.5, 38], [-106, 44.5], [-88.5, 38.5], [112.5, 37.5], [109.5, 39.5], [131, 46.5], [87, 54.5], [60, 66.5], [38, 48.2], [19, 50.2], [7.2, 51.5], [86.4, 23.8], [84, 21.5], [148.5, -22.5], [150.5, -32.5], [29, -26], [116, -1], [-72.7, 11], [73, 49.8], [105.5, 43.5], [33.5, -16], [103, -3.5]]}, {"k": "oil", "n": "原油", "s": "油", "c": "#b5651d", "p": [[49.5, 25.5], [47.9, 29], [47.5, 30.5], [44.4, 35.5], [49, 31], [54, 24], [51.5, 25.5], [73, 61], [53, 55], [49.9, 40.4], [53, 46.2], [-102, 31.8], [-90, 28], [-148.5, 70.3], [-111.5, 57], [-71.6, 10], [-64, 8.5], [-92, 19], [-42, -24.5], [6, 5], [18, 30], [6, 31.7], [12.5, -7], [33, 28.5], [2, 57], [3, 60.5], [125, 46.5], [118.5, 37.5], [114, 5], [101, 1]]}, {"k": "gas", "n": "天然ガス", "s": "ガ", "c": "#2a9fd6", "p": [[70, 67], [76, 66], [51.5, 26.5], [52.5, 27], [62, 37.5], [6.8, 53.2], [-79, 41], [3.3, 32.9], [116, -19.5], [113, 4.5], [117.5, 0.1], [7, 4.4], [-114, 55], [105, 30.5], [64, 40], [-63.5, -21.5], [-61, 10.3], [40.5, -11], [-97, 32]]}, {"k": "iron", "n": "鉄鉱石", "s": "鉄", "c": "#a23b2a", "p": [[118.5, -22.5], [-50.2, -6.1], [-43.8, -20.2], [20.2, 67.8], [-92.5, 47.5], [33.4, 47.9], [36.5, 51.5], [59, 53.4], [123, 41], [118.7, 40], [85.5, 22], [74, 15.3], [63.6, 53.3], [23, -27.8], [-8.5, 7.5], [-12.5, 22.7], [-8.9, 8.5], [-67, 53], [-70.5, -28], [-63.5, 7.5], [55.5, 29]]}, {"k": "cu", "n": "銅", "s": "銅", "c": "#c46a2c", "p": [[-69, -23.5], [-68.8, -24.3], [-71.6, -14.5], [-110.5, 33.2], [-112.1, 40.5], [27.5, -11], [28, -13], [16.2, 51.4], [67.7, 47.8], [106.9, 43], [137.1, -4.05], [141, -5.2], [136.9, -30.4], [-81, 46.5], [117, 28.5], [-80.7, 8.8], [88, 69.3], [-110.3, 31], [55.8, 29.9]]}, {"k": "bx", "n": "ボーキサイト", "s": "ボ", "c": "#8a4f9e", "p": [[141.9, -12.7], [136.9, -12.2], [116, -32], [-14, 11.2], [-12.9, 10], [-56.4, -1.5], [-47.4, -3], [-77.5, 18.2], [104.5, 1], [110.5, 0.5], [111.5, 35], [107.5, 23.5], [83.5, 19.5], [108, 12.5], [-55.5, 5.2], [-58.3, 5.8], [18, 47.1], [-1.2, 6.4], [103.3, 3.8]]}, {"k": "au", "n": "金", "s": "金", "c": "#c9a000", "p": [[27.8, -26.2], [121.5, -30.7], [-116.2, 40.8], [-81.3, 48.5], [-1.6, 6.7], [-78.5, -6.9], [137.1, -4.05], [150, 63], [64.6, 41.5], [120.5, 37.3], [-8, 12], [-3, 12.5], [153.6, -3.1], [-51, -6.5], [32.2, -2.9], [-102.5, 23], [120.7, 16.5]]}, {"k": "u", "n": "ウラン", "s": "ウ", "c": "#4f8a10", "p": [[68, 46.5], [-108, 58.5], [136.9, -30.4], [132.9, -12.7], [15, -22.5], [7.4, 18.7], [64.5, 41.5], [118, 51], [-107.5, 43]]}, {"k": "rm", "n": "レアメタル", "s": "レ", "c": "#7b3fa0", "p": [[109.9, 41.8], [115.5, 25.5], [122.5, -28.9], [-115.5, 35.5], [97.5, 25.5], [26, -11.5], [121.5, -2.5], [118.5, 9.5], [165.8, -21.5], [-74.9, 20.7], [-68.2, -23.5], [116.1, -33.9], [-66.5, -25], [-67.5, -20.2], [95, 36], [88, 69.3]]}, {"k": "dia", "n": "ダイヤモンド", "s": "ダ", "c": "#2aa5a5", "p": [[25.4, -21.3], [113.9, 62.5], [23.6, -6.1], [128.4, -16.7], [-110.3, 64.5], [24.8, -28.7], [20, -8.5], [32.5, -19.5], [-10.9, 8.6], [80.2, 24.7]]}, {"k": "ind", "n": "工業地域", "s": "工", "c": "#d1342b", "p": [[7, 51.5], [19, 50.2], [37.6, 55.7], [60, 56.8], [37.8, 48], [-81, 41], [-83, 42.3], [-87.6, 41.9], [-122, 37.4], [-95.4, 29.8], [-71, 42.4], [139.7, 35.6], [135.5, 34.7], [136.9, 35.2], [130.9, 33.9], [127, 37.5], [129.3, 35.5], [121.5, 31.2], [114.1, 22.5], [113.3, 23.1], [117, 39.5], [114.3, 30.6], [123, 41.1], [121.6, 38.9], [121, 24.8], [103.8, 1.35], [100.5, 13.7], [105.8, 21], [106.7, 10.8], [106.8, -6.2], [72.9, 19.1], [77.2, 28.6], [77.6, 13], [86.2, 22.8], [-46.6, -23.5], [-43.9, -19.9], [-58.4, -34.6], [-100.3, 25.7], [-99.1, 19.4], [28, -26.2], [151.2, -33.9], [145, -37.8], [151.7, -32.9], [9.2, 45.5], [4.8, 45.8], [2.3, 48.9], [-1.9, 52.5], [-2.2, 53.5], [9.2, 48.8], [11.6, 48.1], [4.5, 51.9], [30.3, 59.9], [29, 41], [-79.4, 43.7]]}];
+var minSel = {};
+var LINES = [{"k": "p1000", "n": "年降水量1000mm", "c": "#1c63c0", "w": 2.2, "d": [[[71.6, 19.8], [72.9, 19.3], [73.0, 17.3], [74.0, 14.9], [75.2, 12.4], [76.5, 9.9], [77.4, 8.1]], [[119.5, 34.7], [118.0, 34.0], [115.5, 33.5], [112.5, 33.2], [110, 33.4], [107.5, 33.2], [105.5, 31.8], [103.5, 30.2], [101, 29.0], [98, 28.2], [95, 27.8], [92, 27.5], [89, 27.5], [86, 27.6], [83.5, 27.8], [81.0, 28.4], [80.5, 27.0], [79.5, 25.6], [78.5, 23.8], [78.2, 21.5], [79.0, 19.8], [80.0, 18.0], [80.0, 15.8], [79.7, 13.0], [79.8, 10.8], [78.8, 9.0]], [[141.2, 43.6], [143.0, 44.1], [145.2, 44.2]]], "lab": []}, {"k": "p500", "n": "年降水量500mm", "c": "#7a4fc0", "w": 2.2, "d": [[[127.5, 50.5], [125, 49.2], [123.5, 47.5], [122, 45], [119.5, 43.5], [117, 42.5], [114.5, 41.3], [112.5, 40.2], [110, 38.8], [107.5, 37.5], [105, 36.5], [103, 35.5], [100, 34.5], [97, 33.5], [94, 32.5], [90, 31], [86, 30.5], [83, 30.2], [80.5, 31.2], [78.5, 33], [76.5, 35], [74, 36], [73.6, 34], [74.3, 32], [74.8, 30.5], [75, 28.8], [73.7, 27], [72.2, 25.4], [69.5, 24.6], [67.5, 24.8]]], "lab": []}, {"k": "qh", "n": "チンリン・ホワイ線", "c": "#d1342b", "w": 2.6, "d": [[[103.5, 34.4], [105.5, 33.8], [108, 34.0], [110, 33.5], [112.0, 33.2], [114.0, 32.8], [116.0, 33.1], [118.0, 33.8], [119.6, 34.3]]], "lab": []}, {"k": "w100", "n": "西経100度", "c": "#1c63c0", "w": 2.0, "d": [[[-100, 49.2], [-100, 26.0]]], "lab": []}, {"k": "grape", "n": "ぶどう栽培限界", "c": "#a0166b", "w": 2.4, "d": [[[-4.8, 48.3], [-1, 49.2], [2.5, 50.0], [5.5, 50.5], [8, 50.2], [10, 49.5], [12.5, 49], [15, 48.7], [18, 48.2], [21, 47.8], [25, 47], [29, 46.3], [33, 46], [36, 47], [40, 48.5], [44, 49.8], [48, 50.3], [52, 50.2], [56, 50.8]]], "lab": []}, {"k": "wheat", "n": "小麦栽培限界", "c": "#b0123a", "w": 2.4, "d": [[[10.5, 67.8], [15, 67], [19.5, 66.2], [23.5, 65.3], [25, 64.2], [27.5, 62.8], [31, 61.8], [36, 62], [41, 63.3], [47, 64.5], [52, 64.8], [56, 64.2], [60, 62.5], [62, 60.5]]], "lab": []}];
+var lineSel = {};
+var LINE_REG = {p1000:["sas","ea"], p500:["sas","ea"], qh:["ea"], w100:["na"], grape:["eu"], wheat:["eu"]};
+function lineOk(k, ctx){ return (LINE_REG[k]||[]).indexOf(ctx.key)>=0; }
+function drawLines(ctx){
+  var svg = ctx.svg, w = ctx.w, h = ctx.h, g = svgEl("g", {"class":"layer-ov", "style":"pointer-events:none"});
+  function inside(a){ return a[0]>-20 && a[0]<w+20 && a[1]>-20 && a[1]<h+20; }
+  LINES.forEach(function(L){
+    if(!lineSel[L.k] || !lineOk(L.k, ctx)) return;
+    L.d.forEach(function(path){
+      var pts = path.map(function(q){ return ctx.xy(q[0], q[1]); });
+      if(pts.filter(inside).length < 2) return;
+      g.appendChild(svgEl("path", {d:smoothD(pts), fill:"none", stroke:L.c, "stroke-width":L.w, "stroke-linecap":"round", "stroke-linejoin":"round", style:"fill:none; stroke:" + L.c + " !important; stroke-dasharray:none !important"}));
+    });
+    L.lab.forEach(function(t){
+      var a = ctx.xy(t[0], t[1]);
+      if(a[0]<10 || a[0]>w-10 || a[1]<10 || a[1]>h-6) return;
+      var e = svgEl("text", {x:a[0].toFixed(1), y:a[1].toFixed(1), "class":"ln-lbl", "text-anchor":"middle", style:"fill:" + L.c});
+      e.textContent = t[2]; g.appendChild(e);
+    });
+  });
+  svg.appendChild(g);
+}
 var GNI_NAMES = ["低所得","低中所得","高中所得","高所得"];
 var GNI_COLORS = ["#f4a259","#ffe08a","#9fd8a0","#2b8a73"];
 var JPN = {"AFG":"アフガニスタン","ALB":"アルバニア","DZA":"アルジェリア","AGO":"アンゴラ","ATA":"南極","ARG":"アルゼンチン","ARM":"アルメニア","AUS":"オーストラリア","AUT":"オーストリア","AZE":"アゼルバイジャン","BHS":"バハマ","BHR":"バーレーン","BGD":"バングラデシュ","BLR":"ベラルーシ","BEL":"ベルギー","BLZ":"ベリーズ","BEN":"ベナン","BTN":"ブータン","BOL":"ボリビア","BIH":"ボスニア・ヘルツェゴビナ","BWA":"ボツワナ","BRA":"ブラジル","BRN":"ブルネイ","BGR":"ブルガリア","BFA":"ブルキナファソ","BDI":"ブルンジ","KHM":"カンボジア","CMR":"カメルーン","CAN":"カナダ","CPV":"カーボベルデ","CAF":"中央アフリカ","TCD":"チャド","CHL":"チリ","CHN":"中国","COL":"コロンビア","COM":"コモロ","COG":"コンゴ共和国","COD":"コンゴ民主共和国","CRI":"コスタリカ","CIV":"コートジボワール","HRV":"クロアチア","CUB":"キューバ","CYP":"キプロス","CZE":"チェコ","DNK":"デンマーク","DJI":"ジブチ","DMA":"ドミニカ国","DOM":"ドミニカ共和国","ECU":"エクアドル","EGY":"エジプト","SLV":"エルサルバドル","GNQ":"赤道ギニア","ERI":"エリトリア","EST":"エストニア","ETH":"エチオピア","FLK":"フォークランド諸島","FRO":"フェロー諸島","FJI":"フィジー","FIN":"フィンランド","FRA":"フランス","GUF":"フランス領ギアナ","PYF":"フランス領ポリネシア","ATF":"フランス領南方・南極地域","GAB":"ガボン","GMB":"ガンビア","GEO":"ジョージア","DEU":"ドイツ","GHA":"ガーナ","GRC":"ギリシャ","GRL":"グリーンランド","GRD":"グレナダ","GTM":"グアテマラ","GIN":"ギニア","GNB":"ギニアビサウ","GUY":"ガイアナ","HTI":"ハイチ","HND":"ホンジュラス","HUN":"ハンガリー","ISL":"アイスランド","IND":"インド","IDN":"インドネシア","IRN":"イラン","IRQ":"イラク","IRL":"アイルランド","ISR":"イスラエル","ITA":"イタリア","JAM":"ジャマイカ","JPN":"日本","JOR":"ヨルダン","KAZ":"カザフスタン","KEN":"ケニア","KIR":"キリバス","PRK":"北朝鮮","KOR":"韓国","KWT":"クウェート","KGZ":"キルギス","LAO":"ラオス","LVA":"ラトビア","LBN":"レバノン","LSO":"レソト","LBR":"リベリア","LBY":"リビア","LIE":"リヒテンシュタイン","LTU":"リトアニア","LUX":"ルクセンブルク","MKD":"北マケドニア","MDG":"マダガスカル","MWI":"マラウイ","MYS":"マレーシア","MDV":"モルディブ","MLI":"マリ","MLT":"マルタ","MRT":"モーリタニア","MUS":"モーリシャス","MEX":"メキシコ","FSM":"ミクロネシア連邦","MDA":"モルドバ","MNG":"モンゴル","MNE":"モンテネグロ","MAR":"モロッコ","MOZ":"モザンビーク","MMR":"ミャンマー","NAM":"ナミビア","NRU":"ナウル","NPL":"ネパール","NLD":"オランダ","NCL":"ニューカレドニア","NZL":"ニュージーランド","NIC":"ニカラグア","NER":"ニジェール","NGA":"ナイジェリア","NOR":"ノルウェー","OMN":"オマーン","PAK":"パキスタン","PLW":"パラオ","PSE":"パレスチナ","PAN":"パナマ","PNG":"パプアニューギニア","PRY":"パラグアイ","PER":"ペルー","PHL":"フィリピン","POL":"ポーランド","PRT":"ポルトガル","PRI":"プエルトリコ","QAT":"カタール","ROU":"ルーマニア","RUS":"ロシア","RWA":"ルワンダ","WSM":"サモア","STP":"サントメ・プリンシペ","SAU":"サウジアラビア","SEN":"セネガル","SRB":"セルビア","SYC":"セーシェル","SLE":"シエラレオネ","SGP":"シンガポール","SVK":"スロバキア","SVN":"スロベニア","SLB":"ソロモン諸島","SOM":"ソマリア","ZAF":"南アフリカ","SSD":"南スーダン","ESP":"スペイン","LKA":"スリランカ","SDN":"スーダン","SUR":"スリナム","SWZ":"エスワティニ","SWE":"スウェーデン","CHE":"スイス","SYR":"シリア","TWN":"台湾","TJK":"タジキスタン","TZA":"タンザニア","THA":"タイ","TLS":"東ティモール","TGO":"トーゴ","TON":"トンガ","TTO":"トリニダード・トバゴ","TUN":"チュニジア","TUR":"トルコ","TKM":"トルクメニスタン","TUV":"ツバル","UGA":"ウガンダ","UKR":"ウクライナ","ARE":"アラブ首長国連邦","GBR":"イギリス","USA":"アメリカ合衆国","URY":"ウルグアイ","UZB":"ウズベキスタン","VUT":"バヌアツ","VEN":"ベネズエラ","VNM":"ベトナム","ESH":"西サハラ","YEM":"イエメン","ZMB":"ザンビア","ZWE":"ジンバブエ","KOS":"コソボ","XKX":"コソボ","SOL":"ソマリランド","BRB":"バルバドス","ATG":"アンティグア・バーブーダ","VCT":"セントビンセント・グレナディーン","LCA":"セントルシア","KNA":"セントクリストファー・ネーヴィス","SJM":"スヴァールバル諸島","HKG":"香港","MAC":"マカオ","SMR":"サンマリノ","AND":"アンドラ","MCO":"モナコ","VAT":"バチカン","COK":"クック諸島","NIU":"ニウエ","MHL":"マーシャル諸島","BMU":"バミューダ","GGY":"ガーンジー","JEY":"ジャージー","IMN":"マン島","CYN":"北キプロス"};
@@ -1268,7 +1294,7 @@ function isoOf(el){
 function clearLayer(ctx){
   var svg = ctx.svg;
   Array.prototype.slice.call(svg.querySelectorAll(".layer-ov")).forEach(function(n){ n.parentNode.removeChild(n); });
-  Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){ p.style.removeProperty("fill"); });
+  Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){ p.style.removeProperty("fill"); p.style.removeProperty("stroke"); p.style.removeProperty("stroke-dasharray"); p.style.removeProperty("stroke-width"); });
 }
 function polyD(ctx, poly){
   return "M" + poly.map(function(q){ var a = ctx.xy(q[0], q[1]); return a[0].toFixed(1) + " " + a[1].toFixed(1); }).join("L") + "Z";
@@ -1282,30 +1308,6 @@ function smoothD(pts){
     d += "C" + c1[0].toFixed(1)+" "+c1[1].toFixed(1)+" "+c2[0].toFixed(1)+" "+c2[1].toFixed(1)+" "+p2[0].toFixed(1)+" "+p2[1].toFixed(1);
   }
   return d;
-}
-function drawCurrents(ctx){
-  var svg = ctx.svg, w = ctx.w, h = ctx.h;
-  var defs = svgEl("defs", {"class":"layer-ov"});
-  [["w","#e0453a"],["c","#2f6fd0"]].forEach(function(a){
-    var mk = svgEl("marker", {id:"ar-"+a[0], viewBox:"0 0 10 10", refX:"7", refY:"5", markerWidth:"6", markerHeight:"6", orient:"auto-start-reverse"});
-    mk.appendChild(svgEl("path", {d:"M0 0L10 5L0 10z", fill:a[1]}));
-    defs.appendChild(mk);
-  });
-  svg.appendChild(defs);
-  var g = svgEl("g", {"class":"layer-ov"});
-  CURRENTS.forEach(function(c){
-    [-360,0,360].forEach(function(off){
-      var pts = c.p.map(function(q){ return ctx.xy(q[0]+off, q[1]); });
-      var inside = pts.filter(function(a){ return a[0]>-30 && a[0]<w+30 && a[1]>-30 && a[1]<h+30; }).length;
-      if(inside < 2) return;
-      var col = c.t==="w" ? "#e0453a" : "#2f6fd0";
-      g.appendChild(svgEl("path", {d:smoothD(pts), "class":"cur "+c.t, style:"stroke:"+col}));
-      var pe = pts[pts.length-1], pq = pts[pts.length-2], ang = Math.atan2(pe[1]-pq[1], pe[0]-pq[0]), hl = 11, hw = 5.5;
-      var bx = pe[0]-Math.cos(ang)*hl, by = pe[1]-Math.sin(ang)*hl;
-      g.appendChild(svgEl("path", {d:"M"+pe[0]+" "+pe[1]+"L"+(bx-Math.sin(ang)*hw)+" "+(by+Math.cos(ang)*hw)+"L"+(bx+Math.sin(ang)*hw)+" "+(by-Math.cos(ang)*hw)+"Z", style:"fill:"+col+";stroke:"+col+";stroke-width:1;stroke-linejoin:round"}));
-    });
-  });
-  svg.appendChild(g);
 }
 function paintElev(ctx, L){
   var svg = ctx.svg, E = L.rs, g = rGrid(E), rad = Math.PI/180, sc = 2;
@@ -1352,11 +1354,6 @@ function paintLayer(ctx, key){
   var svg = ctx.svg;
   if(!key){ if(ctx.city) addPin(ctx); return []; }
   var L = LAYERS[key];
-  if(L.kind==="current"){
-    drawCurrents(ctx);
-    if(ctx.city) addPin(ctx);
-    return ["w","c"];
-  }
   if(L.kind==="raster"){
     if(!ctx.datamap) return null;
     return paintElev(ctx, L);
@@ -1367,8 +1364,9 @@ function paintLayer(ctx, key){
   Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){
     var iso = isoOf(p); paths[iso] = p;
     var cls = L.map[iso];
-    if(!cls){ p.style.setProperty("fill", "#ffffff", "important"); return; }
+    if(!cls){ p.style.setProperty("fill", "#ffffff", "important"); p.style.setProperty("stroke", "#ffffff", "important"); p.style.setProperty("stroke-dasharray", "none", "important"); return; }
     p.style.setProperty("fill", colors[cls], "important");
+    p.style.setProperty("stroke", colors[cls], "important"); p.style.setProperty("stroke-dasharray", "none", "important"); p.style.setProperty("stroke-width", "1.6px", "important");
     var bb; try{ bb = p.getBBox(); }catch(e){ bb = null; }
     if(!bb || (bb.x+bb.width>0 && bb.x<ctx.w && bb.y+bb.height>0 && bb.y<ctx.h)) present[cls] = true;
   });
@@ -1379,17 +1377,16 @@ function paintLayer(ctx, key){
     var x0 = Math.min.apply(null, xs.map(function(a){return a[0];})), x1 = Math.max.apply(null, xs.map(function(a){return a[0];}));
     var y0 = Math.min.apply(null, xs.map(function(a){return a[1];})), y1 = Math.max.apply(null, xs.map(function(a){return a[1];}));
     if(x1<0 || x0>ctx.w || y1<0 || y0>ctx.h) return;
-    var id = "clip-" + s[0];
-    if(!svg.querySelector("#"+id)){
-      var cl = svgEl("clipPath", {id:id, "class":"layer-ov"});
-      cl.appendChild(svgEl("path", {d:cp.getAttribute("d")}));
-      svg.appendChild(cl);
-    }
-    var g = svgEl("g", {"class":"layer-ov", "clip-path":"url(#"+id+")"});
-    g.appendChild(svgEl("path", {d:polyD(ctx, s[2]), fill:colors[s[1]], stroke:"none"}));
+    var sc = colors[s[1]], cid = "clipP-" + n;
+    var cl = svgEl("clipPath", {id:cid, "class":"layer-ov"});
+    cl.appendChild(svgEl("path", {d:polyD(ctx, s[2])}));
+    svg.appendChild(cl);
+    var g = svgEl("g", {"class":"layer-ov", "clip-path":"url(#"+cid+")"});
+    g.appendChild(svgEl("path", {d:cp.getAttribute("d"), fill:sc, stroke:sc, "stroke-width":1.6, "stroke-linejoin":"round", style:"fill:" + sc + " !important; stroke:" + sc + " !important; stroke-width:1.6px !important; stroke-dasharray:none !important; stroke-opacity:1 !important"}));
     svg.appendChild(g); n++;
     present[s[1]] = true;
   });
+  /* 国境線(薄い点線)を重ね直す */
   /* 国境線(薄い点線)を重ね直す */
   var bl = svgEl("g", {"class":"layer-ov"});
   Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){
@@ -1541,29 +1538,42 @@ function buildInsets(parent, baseCtx, key){
     if(c2.datamap) paintInset(c2, sp);
   });
 }
-var LAYER_BTNS = [["","分布なし"],["rel","宗教"],["lang","言語"],["fam","語族"],["eth","民族"],["agr","農業"],["cur","海流"],["col","旧宗主国"],["gni","一人当たりGNI"],["clim","気候区分"],["elev","標高"]];
-var LAYER_MAP = {lang:"lang", rel:"rel", eth:"eth", agr:"agr", cur:"cur"};
+var LAYER_BTNS = [["","分布なし"],["rel","宗教"],["lang","言語"],["fam","語族"],["eth","民族"],["agr","農業"],["mi","鉱工業"],["col","旧宗主国"],["grp","国家群"],["gni","一人当たりGNI"],["clim","気候区分"],["elev","標高"]];
+var LAYER_MAP = {lang:"lang", rel:"rel", eth:"eth", agr:"agr"};
 function mountLayers(root, getCtx){
-  var html = '<h3>分布を重ねる <small>ボタンを押すと地図に色で表示します</small></h3><div class="lchips">';
+  var html = '<h3>分布を重ねる <small>ボタンを押すと地図に色で表示します　(版 1123-R)</small></h3><div class="bsw"><button type="button" class="chip lchip4" aria-pressed="true">国境線 表示中</button></div><div class="lchips">';
   LAYER_BTNS.forEach(function(b){
     var off = false;
     html += '<button type="button" class="chip lchip' + (off ? ' off' : '') + '" data-l="' + b[0] + '" aria-pressed="false">' + b[1] + (off ? '<span class="n">準備中</span>' : '') + '</button>';
   });
+  html += '</div><div class="lchips lsub" hidden>';
+  GRP_ORDER.forEach(function(g){ html += '<button type="button" class="chip lchip2" data-g="' + g + '" aria-pressed="false">' + g + '</button>'; });
+  html += '</div><div class="lchips lsub lsub2" hidden><span class="lsubt">作物マーク</span>';
+  CROPS.forEach(function(c){ html += '<button type="button" class="chip lchip3" data-c="' + c.k + '" aria-pressed="false"><i class="cdot" style="background:' + c.c + '">' + c.s + '</i>' + c.n + '</button>'; });
+  html += '<span class="lsubt lsubt-ln">線</span>';
+  LINES.forEach(function(c){ html += '<button type="button" class="chip lchip3 lchip6" data-ln="' + c.k + '" aria-pressed="false"><i class="cdot" style="background:' + c.c + '; min-width:22px">線</i>' + c.n + '</button>'; });
+  html += '</div><div class="lchips lsub lsub3" hidden><span class="lsubt">鉱工業</span>';
+  MINES.forEach(function(c){ html += '<button type="button" class="chip lchip3 lchip5" data-m="' + c.k + '" aria-pressed="false"><i class="cdot" style="background:' + c.c + '">' + c.s + '</i>' + c.n + '</button>'; });
   html += '</div><div class="lbody" aria-live="polite"></div>';
   root.innerHTML = html;
   var body = root.querySelector(".lbody");
+  var bb = root.querySelector(".lchip4");
+  function syncB(){ var on = !document.body.classList.contains("nob"); bb.setAttribute("aria-pressed", on ? "true" : "false"); bb.textContent = on ? "国境線 表示中" : "国境線 非表示"; }
+  bb.addEventListener("click", function(){ document.body.classList.toggle("nob"); syncB(); });
+  syncB();
   function legend(key, present){
     if(!key) return "";
+    if(key==="mi") return '<p class="lname">鉱工業</p><p class="src-note">ボタンで選んだ資源の主な産地と、主な工業地域を丸いマークで示します。</p>';
     var L = LAYERS[key];
     var out = '<p class="lname">' + esc(L.label) + '</p>';
     if(present===null){
       out += '<p class="src-note">地図データを読み込めなかったため、色を付けて表示できません。ページを再読み込みしてください。</p>';
     }else{
       out += '<div class="llegend">' + L.classes.filter(function(c){ return present.indexOf(c[0])>=0; }).map(function(c){
-        var sw = L.kind==="current" ? '<i class="arrow" style="--c:' + c[2] + '"></i>' : '<i style="background:' + c[2] + '"></i>';
+        var sw = '<i style="background:' + c[2] + '"></i>';
         return '<span>' + sw + esc(c[1]) + '</span>';
-      }).join("") + (L.kind==="current" ? "" : '<span><i class="none"></i>' + (L.nonetxt || '色なし(対象外・データなし)') + '</span>') + '</div>';
-      if(L.kind!=="current" && present.length===0) out += '<p class="src-note">この地図の範囲には、色を付ける国がありません。</p>';
+      }).join("") + ('<span><i class="none"></i>' + (L.nonetxt || '色なし(対象外・データなし)') + '</span>') + '</div>';
+      if(present.length===0) out += '<p class="src-note">この地図の範囲には、色を付ける国がありません。</p>';
     }
     if(L.table && present!==null){
       out += '<table class="ctable"><thead><tr><th>植民地</th><th>宗主国(最初の宗主国→次の宗主国)</th></tr></thead><tbody>' + L.table.map(function(r){ return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>'; }).join("") + '</tbody></table>';
@@ -1571,9 +1581,34 @@ function mountLayers(root, getCtx){
     return out;
   }
   function apply(){
+    syncB();
     var ctx = getCtx(); if(!ctx) return;
-    var present = paintLayer(ctx, lastLayer);
+    var sub = root.querySelector(".lsub:not(.lsub2):not(.lsub3)"); sub.hidden = (lastLayer!=="grp");
+    if(lastLayer==="grp") setGroup(lastGroup);
+    Array.prototype.forEach.call(root.querySelectorAll(".lchip2"), function(b){
+      b.setAttribute("aria-pressed", b.getAttribute("data-g")===lastGroup ? "true" : "false");
+    });
+    var sub2 = root.querySelector(".lsub2"); sub2.hidden = (lastLayer!=="agr");
+    var anyLn = false;
+    Array.prototype.forEach.call(root.querySelectorAll(".lchip6"), function(b){
+      var k = b.getAttribute("data-ln"), ok = lineOk(k, ctx);
+      b.hidden = !ok; if(ok) anyLn = true;
+      b.setAttribute("aria-pressed", lineSel[k] ? "true" : "false");
+    });
+    var lt = root.querySelector(".lsubt-ln"); if(lt) lt.hidden = !anyLn;
+    var sub3 = root.querySelector(".lsub3"); sub3.hidden = (lastLayer!=="mi");
+    Array.prototype.forEach.call(root.querySelectorAll(".lchip5"), function(b){
+      b.setAttribute("aria-pressed", minSel[b.getAttribute("data-m")] ? "true" : "false");
+    });
+    Array.prototype.forEach.call(root.querySelectorAll(".lchip3:not(.lchip5):not(.lchip6)"), function(b){
+      b.setAttribute("aria-pressed", cropSel[b.getAttribute("data-c")] ? "true" : "false");
+    });
+    var present = paintLayer(ctx, lastLayer==="mi" ? "" : lastLayer);
+    if(lastLayer==="agr" && present!==null) drawMarks(ctx, CROPS, cropSel);
+    if(lastLayer==="agr" && present!==null) drawLines(ctx);
+    if(lastLayer==="mi") drawMarks(ctx, MINES, minSel);
     body.innerHTML = legend(lastLayer, present);
+    if(lastLayer==="agr" && lineSel.qh && lineOk("qh", ctx)) body.innerHTML += '<p class="legend-note">チンリン・ホワイ線(赤い線)より北は小麦地域、南は稲作地域です。</p>';
     if(lastLayer==="lang" || lastLayer==="fam" || lastLayer==="eth") buildInsets(body, ctx, lastLayer);
     Array.prototype.forEach.call(root.querySelectorAll(".lchip"), function(b){
       b.setAttribute("aria-pressed", b.getAttribute("data-l")===lastLayer ? "true" : "false");
@@ -1585,6 +1620,18 @@ function mountLayers(root, getCtx){
       lastLayer = (l===lastLayer) ? "" : l;
       apply();
     });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".lchip2"), function(b){
+    b.addEventListener("click", function(){ lastGroup = b.getAttribute("data-g"); lastLayer = "grp"; apply(); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".lchip3:not(.lchip5):not(.lchip6)"), function(b){
+    b.addEventListener("click", function(){ var k = b.getAttribute("data-c"); cropSel[k] = !cropSel[k]; apply(); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".lchip6"), function(b){
+    b.addEventListener("click", function(){ var k = b.getAttribute("data-ln"); lineSel[k] = !lineSel[k]; apply(); });
+  });
+  Array.prototype.forEach.call(root.querySelectorAll(".lchip5"), function(b){
+    b.addEventListener("click", function(){ var k = b.getAttribute("data-m"); minSel[k] = !minSel[k]; apply(); });
   });
   return apply;
 }
@@ -1600,10 +1647,10 @@ window.addEventListener("resize", function(){
 });
 
 /* ---------- 分布地図(クイズと別に、地域と分布を選んで見る) ---------- */
-var atlasKey = "ea";
+var atlasKey = "wd";
 function buildAtlasChips(){
   var box = $("atlas-regions"); box.innerHTML = "";
-  REGION_ORDER.forEach(function(k){
+  ["wd"].concat(REGION_ORDER).forEach(function(k){
     var b = document.createElement("button");
     b.type = "button"; b.className = "chip"; b.setAttribute("aria-pressed", k===atlasKey ? "true":"false");
     b.textContent = REGIONS[k].n;
@@ -1656,6 +1703,3 @@ buildChips();
 refreshStart();
 })();
 </script>
-
-</body>
-</html>
