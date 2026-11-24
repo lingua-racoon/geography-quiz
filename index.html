@@ -1,17 +1,6 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e5a6e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="共テ地理">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
-<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>共テ地理 都市クイズ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
@@ -179,6 +168,19 @@ body.nob .map .datamaps-subunit{stroke:none!important}
 body.nob .ov-border{display:none}
 .ln-lbl{font-family:var(--body); font-weight:700; font-size:11px; paint-order:stroke; stroke:var(--surface); stroke-width:3px; stroke-linejoin:round; pointer-events:none}
 .theme-btn{position:fixed; top:calc(env(safe-area-inset-top,0px) + 8px); right:max(10px, env(safe-area-inset-right,0px)); z-index:50; padding:4px 10px; min-height:38px; min-width:44px; font-size:20px; line-height:1; font-family:var(--body); color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:999px; cursor:pointer; opacity:.92}
+.lq{margin-top:18px}
+#screen-lq .ov-border{display:inline!important; stroke:#6b7280; stroke-width:.8; stroke-dasharray:none; stroke-linecap:butt}
+#screen-lq .datamaps-subunit{stroke-width:.8}
+.lq-q{font-weight:700; margin:0 0 10px}
+.lq-opts{display:grid; gap:8px; margin:0 0 10px}
+.lq-opt{padding:10px 14px; text-align:left; font:inherit; font-size:15px; line-height:1.4; color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:12px; cursor:pointer}
+.lq-opt.ok{border-color:var(--ok); background:var(--ok-soft)}
+.lq-opt.ng{border-color:var(--ng); background:var(--ng-soft)}
+.lq-fb{margin:0 0 10px; font-weight:700}
+.lq-on .lbody{display:none}
+.lq-on-r .mk{display:none}
+.lq-on .lchips, .lq-on .bsw, .lq-on .lsub{pointer-events:none; opacity:.45}
+.lq-on-r #atlas-regions{pointer-events:none; opacity:.45}
 .legend-note{font-size:13px; color:var(--muted); margin:8px 0 0}
 .lsubt{font-size:13px; color:var(--muted); align-self:center}
 .lchip3{padding:4px 10px; font-size:13px; min-height:32px; display:inline-flex; align-items:center; gap:5px}
@@ -224,6 +226,7 @@ body.nob .ov-border{display:none}
     <div class="seg" id="mode-seg" role="group" aria-label="問題の種類">
       <button type="button" data-m="city" aria-pressed="true">都市・地名 → 国</button>
       <button type="button" data-m="country" aria-pressed="false">国 → 地域</button>
+      <button type="button" data-m="legend" aria-pressed="false">分布地図の凡例</button>
     </div>
 
     <div id="src-block">
@@ -236,9 +239,16 @@ body.nob .ov-border{display:none}
     <p class="src-note" id="src-note"></p>
     </div>
 
+    <div id="lg-block" hidden>
+      <h2>出題する分布</h2>
+      <div class="chips" id="lg-genres"></div>
+      <h2>出題する地域</h2>
+      <div class="chips" id="lg-regions"></div>
+      <p class="src-note">地図に1つの区分の色だけが塗られています。その区分名を選択肢から選びます。</p>
+    </div>
     <h2 id="region-h2">出題する地域</h2>
     <div class="chips" id="region-chips"></div>
-    <p style="margin-top:8px"><button class="linkbtn" id="all-on" type="button">すべて選ぶ</button> <button class="linkbtn" id="all-off" type="button">すべて外す</button></p>
+    <p id="all-p" style="margin-top:8px"><button class="linkbtn" id="all-on" type="button">すべて選ぶ</button> <button class="linkbtn" id="all-off" type="button">すべて外す</button></p>
 
     <h2>出題数</h2>
     <div class="seg" id="count-seg" role="group" aria-label="出題数">
@@ -276,6 +286,19 @@ body.nob .ov-border{display:none}
     <div class="map-wrap" style="margin-top:14px"><div class="map" id="amap"></div></div>
     <div class="layers" id="atlas-layers"></div>
     <div class="actions"><button class="btn ghost" id="atlas-back" type="button">設定に戻る</button></div>
+  </section>
+
+  <!-- 凡例クイズ -->
+  <section id="screen-lq" hidden>
+    <div class="topbar"><span id="lq-progress"></span><span id="lq-score"></span><button class="linkbtn" id="lq-quit" type="button">やめる</button></div>
+    <div class="bar"><i id="lq-bar"></i></div>
+    <p class="eyebrow" id="lq-title"></p>
+    <div class="map-wrap"><div class="map" id="lmap"></div></div>
+    <p class="lq-q" id="lq-q" style="margin-top:14px"></p>
+    <div class="lq-opts" id="lq-opts"></div>
+    <p class="lq-fb" id="lq-fb"></p>
+    <div id="lq-legend"></div>
+    <div class="actions"><button class="btn" id="lq-next" type="button" hidden>次の問題</button></div>
   </section>
 
   <!-- 結果画面 -->
@@ -583,7 +606,7 @@ var LAYERS = {
       ["ir","ペルシア・トルコ・中央アジア系","#4caf6a"],["ea","東アジア系(漢・モンゴル・日本・朝鮮など)","#e0405d"],
       ["se","東南アジア系(マレー・タイ・ビルマなど。マダガスカルを含む)","#5fbfd6"],["in","インド系(インド・アーリア系)","#b9722f"],["dr","ドラヴィダ系","#d69a4a"],
       ["af","アフリカ系(黒人)","#8a6d3b"],["mz","混血(メスチーソ・ムラートなど)","#d9534f"],
-      ["oc","先住民・オセアニア系(メラネシア・ポリネシアなど)","#4a8fe0"],["je","ユダヤ系","#9aa3ad"],["ku","クルド系(トルコ・イラク・イラン・シリアにまたがる)","#7d1b4d"],["am","アルメニア系","#3b3b98"],["ce","ケルト系(アイルランド・スコットランド・ウェールズ・コーンウォール・ブルターニュ・ガリシア)","#1f7a3a"]],
+      ["oc","先住民・オセアニア系(インディオ・メラネシア・ポリネシアなど)","#4a8fe0"],["je","ユダヤ系","#9aa3ad"],["ku","クルド系(トルコ・イラク・イラン・シリアにまたがる)","#7d1b4d"],["am","アルメニア系","#3b3b98"],["ce","ケルト系(アイルランド・スコットランド・ウェールズ・コーンウォール・ブルターニュ・ガリシア)","#1f7a3a"]],
     base:{
       ge:"USA CAN AUS NZL GBR DEU AUT CHE NLD BEL LUX DNK NOR SWE ISL LIE FRO FLK",
       la:"FRA ITA ESP PRT ROU MDA ARG URY CRI AND SMR",
@@ -595,10 +618,10 @@ var LAYERS = {
       ir:"IRN TUR AZE UZB TKM KAZ KGZ TJK AFG",
       ea:"CHN JPN KOR PRK TWN HKG MAC MNG BTN SGP",
       se:"VNM THA LAO KHM MMR MYS IDN PHL BRN TLS MDG",
-      in:"IND PAK BGD NPL LKA MDV MUS GUY",
+      in:"IND PAK BGD NPL LKA MDV MUS GUY SUR",
       af:"AGO BEN BWA BFA BDI CMR CAF TCD COM COG COD CIV DJI GNQ ERI ETH GAB GMB GHA GIN GNB KEN LSO LBR MWI MLI MOZ NAM NER NGA RWA SEN SLE SOM ZAF SSD SWZ TZA TGO UGA ZMB ZWE HTI JAM BHS BRB ATG DMA GRD KNA LCA VCT TTO",
-      mz:"MEX GTM HND SLV NIC PAN COL VEN ECU PER BOL PRY CHL BRA CUB DOM PRI CPV STP SYC BLZ SUR",
-      oc:"PNG SLB VUT FJI WSM TON KIR PLW FSM MHL NRU TUV NCL PYF GRL NIU",
+      mz:"MEX HND SLV NIC PAN COL VEN ECU PRY CHL BRA CUB DOM PRI CPV STP SYC BLZ",
+      oc:"GTM PER BOL PNG SLB VUT FJI WSM TON KIR PLW FSM MHL NRU TUV NCL PYF GRL NIU",
       je:"ISR"},
     sub:[
       ["MLI","ar",[[-12.3,16.6],[-9,16.2],[-5,16.1],[-2,16.3],[0.5,15.4],[4.3,16.5],[4.3,25],[-5,25],[-12.8,25]]],["NER","ar",[[0.2,16.7],[4,16.3],[8,17.6],[12.5,16.6],[15.9,16.8],[15.9,23.5],[0.2,23.5]]],["TCD","ar",[[13.6,15.9],[18,14.6],[22,13.9],[24,15.6],[24,23.6],[14,23.6]]],
@@ -811,8 +834,8 @@ function gniCls(v){ return v<=1175 ? 0 : v<=4635 ? 1 : v<=14375 ? 2 : 3; }
   Object.keys(LAYERS).forEach(function(k){ var L = LAYERS[k]; if(!L.map || k==="gni") return;
     if(L.map.CYP && !L.map.CYN) L.map.CYN = ov[k] || L.map.CYP; });
 })();
-var GROUPS = {"EU": {"name": "EU(ヨーロッパ連合)", "o": ["BEL", "LUX", "NLD", "ITA", "FRA", "DEU"], "m": ["AUT", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "GRC", "HUN", "IRL", "LVA", "LTU", "MLT", "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"], "x": ["GBR"]}, "EFTA": {"name": "EFTA(ヨーロッパ自由貿易連合)", "o": ["NOR", "CHE"], "m": ["ISL", "LIE"], "x": ["GBR", "DNK", "SWE", "AUT", "PRT", "FIN"]}, "NATO": {"name": "NATO(北大西洋条約機構)", "o": ["BEL", "CAN", "DNK", "FRA", "ISL", "ITA", "LUX", "NLD", "NOR", "PRT", "GBR", "USA"], "m": ["GRC", "TUR", "DEU", "ESP", "CZE", "HUN", "POL", "BGR", "EST", "LVA", "LTU", "ROU", "SVK", "SVN", "ALB", "HRV", "MNE", "MKD", "FIN", "SWE"], "x": []}, "ASEAN": {"name": "ASEAN(東南アジア諸国連合)", "o": ["THA", "MYS", "SGP", "PHL", "IDN"], "m": ["BRN", "VNM", "MMR", "LAO", "KHM", "TLS"], "x": []}, "OECD": {"name": "OECD(経済協力開発機構)", "o": ["AUT", "BEL", "DNK", "FRA", "DEU", "GRC", "ISL", "IRL", "ITA", "LUX", "NLD", "NOR", "PRT", "ESP", "SWE", "CHE", "TUR", "GBR", "USA", "CAN"], "m": ["JPN", "FIN", "AUS", "NZL", "MEX", "CZE", "HUN", "POL", "KOR", "SVK", "CHL", "SVN", "ISR", "EST", "LVA", "LTU", "COL", "CRI"], "x": []}, "OPEC": {"name": "OPEC(石油輸出国機構)", "o": ["IRN", "IRQ", "KWT", "SAU", "VEN"], "m": ["LBY", "ARE", "DZA", "NGA", "GAB", "GNQ", "COG"], "x": ["QAT", "ECU", "AGO", "IDN"]}, "OAPEC": {"name": "OAPEC(アラブ石油輸出国機構)", "o": ["SAU", "KWT", "LBY"], "m": ["DZA", "BHR", "EGY", "ARE", "IRQ", "QAT", "SYR"], "x": []}, "CIS": {"name": "CIS(独立国家共同体)", "o": ["RUS", "BLR", "KAZ", "UZB", "KGZ", "TJK", "TKM", "ARM", "AZE", "MDA"], "m": [], "x": ["UKR", "GEO"]}, "USMCA": {"name": "USMCA(米国・メキシコ・カナダ協定)", "o": ["USA", "CAN", "MEX"], "m": [], "x": []}, "MERCOSUR": {"name": "MERCOSUR(南米南部共同市場)", "o": ["ARG", "BRA", "PRY", "URY"], "m": ["BOL"], "x": ["VEN"]}, "APEC": {"name": "APEC(アジア太平洋経済協力)", "o": ["AUS", "BRN", "CAN", "IDN", "JPN", "KOR", "MYS", "NZL", "PHL", "SGP", "THA", "USA"], "m": ["CHN", "TWN", "MEX", "PNG", "CHL", "PER", "RUS", "VNM"], "x": []}, "AU": {"name": "AU(アフリカ連合)", "o": ["DZA", "AGO", "BEN", "BWA", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "COD", "CIV", "DJI", "EGY", "GNQ", "ERI", "SWZ", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "LBY", "MDG", "MWI", "MLI", "MRT", "MUS", "MOZ", "NAM", "NER", "NGA", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SDN", "TZA", "TGO", "TUN", "UGA", "ZMB", "ZWE"], "m": ["MAR", "SSD"], "x": []}, "CPTPP": {"name": "CPTPP(環太平洋パートナーシップ)", "o": ["AUS", "BRN", "CAN", "CHL", "JPN", "MYS", "MEX", "NZL", "PER", "SGP", "VNM"], "m": ["GBR"], "x": []}};
-var GRP_ORDER = ["EU","EFTA","NATO","OECD","OPEC","OAPEC","CIS","USMCA","MERCOSUR","APEC","AU","CPTPP","ASEAN"];
+var GROUPS = {"EU": {"name": "EU(ヨーロッパ連合)", "o": ["BEL", "LUX", "NLD", "ITA", "FRA", "DEU"], "m": ["AUT", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "GRC", "HUN", "IRL", "LVA", "LTU", "MLT", "POL", "PRT", "ROU", "SVK", "SVN", "ESP", "SWE"], "x": ["GBR"]}, "EFTA": {"name": "EFTA(ヨーロッパ自由貿易連合)", "o": ["NOR", "CHE"], "m": ["ISL", "LIE"], "x": ["GBR", "DNK", "SWE", "AUT", "PRT", "FIN"]}, "NATO": {"name": "NATO(北大西洋条約機構)", "o": ["BEL", "CAN", "DNK", "FRA", "ISL", "ITA", "LUX", "NLD", "NOR", "PRT", "GBR", "USA"], "m": ["GRC", "TUR", "DEU", "ESP", "CZE", "HUN", "POL", "BGR", "EST", "LVA", "LTU", "ROU", "SVK", "SVN", "ALB", "HRV", "MNE", "MKD", "FIN", "SWE"], "x": []}, "ASEAN": {"name": "ASEAN(東南アジア諸国連合)", "o": ["THA", "MYS", "SGP", "PHL", "IDN"], "m": ["BRN", "VNM", "MMR", "LAO", "KHM", "TLS"], "x": []}, "OECD": {"name": "OECD(経済協力開発機構)", "o": ["AUT", "BEL", "DNK", "FRA", "DEU", "GRC", "ISL", "IRL", "ITA", "LUX", "NLD", "NOR", "PRT", "ESP", "SWE", "CHE", "TUR", "GBR", "USA", "CAN"], "m": ["JPN", "FIN", "AUS", "NZL", "MEX", "CZE", "HUN", "POL", "KOR", "SVK", "CHL", "SVN", "ISR", "EST", "LVA", "LTU", "COL", "CRI"], "x": []}, "OPEC": {"name": "OPEC(石油輸出国機構)", "o": ["IRN", "IRQ", "KWT", "SAU", "VEN"], "m": ["LBY", "ARE", "DZA", "NGA", "GAB", "GNQ", "COG"], "x": ["QAT", "ECU", "AGO", "IDN"]}, "OAPEC": {"name": "OAPEC(アラブ石油輸出国機構)", "o": ["SAU", "KWT", "LBY"], "m": ["DZA", "BHR", "EGY", "ARE", "IRQ", "QAT", "SYR"], "x": []}, "CIS": {"name": "CIS(独立国家共同体)", "o": ["RUS", "BLR", "KAZ", "UZB", "KGZ", "TJK", "TKM", "ARM", "AZE", "MDA"], "m": [], "x": ["UKR", "GEO"]}, "USMCA": {"name": "USMCA(米国・メキシコ・カナダ協定)", "o": ["USA", "CAN", "MEX"], "m": [], "x": []}, "MERCOSUR": {"name": "MERCOSUR(南米南部共同市場)", "o": ["ARG", "BRA", "PRY", "URY"], "m": ["BOL"], "x": ["VEN"]}, "APEC": {"name": "APEC(アジア太平洋経済協力)", "o": ["AUS", "BRN", "CAN", "IDN", "JPN", "KOR", "MYS", "NZL", "PHL", "SGP", "THA", "USA"], "m": ["CHN", "TWN", "MEX", "PNG", "CHL", "PER", "RUS", "VNM"], "x": []}, "AU": {"name": "AU(アフリカ連合)", "o": ["DZA", "AGO", "BEN", "BWA", "BFA", "BDI", "CMR", "CPV", "CAF", "TCD", "COM", "COG", "COD", "CIV", "DJI", "EGY", "GNQ", "ERI", "SWZ", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "LBY", "MDG", "MWI", "MLI", "MRT", "MUS", "MOZ", "NAM", "NER", "NGA", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SDN", "TZA", "TGO", "TUN", "UGA", "ZMB", "ZWE"], "m": ["MAR", "SSD"], "x": []}, "CPTPP": {"name": "CPTPP(環太平洋パートナーシップ)", "o": ["AUS", "BRN", "CAN", "CHL", "JPN", "MYS", "MEX", "NZL", "PER", "SGP", "VNM"], "m": ["GBR"], "x": []}, "CAN": {"name": "CAN(アンデス共同体)", "o": ["BOL", "COL", "ECU", "PER"], "m": [], "x": ["CHL", "VEN"]}, "SICA": {"name": "SICA(中米統合機構)", "o": ["GTM", "HND", "NIC", "SLV", "CRI", "PAN"], "m": ["BLZ"], "x": []}};
+var GRP_ORDER = ["EU","EFTA","NATO","OECD","OPEC","OAPEC","CIS","USMCA","MERCOSUR","CAN","SICA","APEC","AU","CPTPP","ASEAN"];
 var GRP_CLS = [["o","原加盟国","#1b5fb8"],["m","その他の加盟国","#7db4ea"],["x","脱退・資格停止","#e79a4b"]];
 LAYERS.grp = {label:"国家群", kind:"area", classes:GRP_CLS, map:{}, nonetxt:"非加盟国(色なし)"};
 var lastGroup = "EU";
@@ -826,7 +849,7 @@ setGroup("EU");
 var CROPS = [{"k": "tea", "n": "茶", "s": "茶", "c": "#2e9e4f", "p": [[94.5, 27], [88.3, 27], [76.7, 11.4], [80.7, 7.1], [35.3, -0.4], [100.5, 22.5], [120, 30], [118, 26], [103, 30], [114, 30.5], [138, 35], [105, 21.5], [107.5, -7], [40.5, 41], [35, -16], [-55, -27], [102, 26.3], [91.5, 25]]}, {"k": "cof", "n": "コーヒー", "s": "コ", "c": "#7a4a2a", "p": [[-47, -21.5], [-45, -19], [-42, -19.5], [-50, -23.5], [-75.5, 5], [108, 12.7], [98.5, 3], [103, -4], [120, -3], [37, 7.5], [37, -0.5], [32, 1], [35, -3.5], [-5.5, 6.5], [-90.5, 14.8], [-92.5, 16.5], [-84, 10], [-87, 14.5], [-75, -11], [44, 14], [76, 12.5], [48, -18], [145, -6], [-79, -1.5], [106, 15]]}, {"k": "cac", "n": "カカオ", "s": "カ", "c": "#5b2a86", "p": [[-5, 6.5], [-1.5, 6.5], [5, 6.8], [11.5, 4], [120.5, -2.5], [-79.5, -2], [-39, -14.5], [-70, 19], [-76, -8], [-73, 7], [-66, 10], [-93, 18], [147, -6.5], [49, -14], [76.5, 10], [6.7, 0.3], [117, 5.2]]}, {"k": "ban", "n": "バナナ", "s": "バ", "c": "#d6b800", "p": [[-79.7, -2.5], [-83.5, 10], [125.5, 7], [-46, -23.5], [-40, -6], [75, 15], [78, 10], [-74.5, 10.5], [-89, 15.5], [-87.5, 15.5], [-82.5, 8.5], [32, 0.5], [37, -3.5], [9.7, 4.2], [-4, 5.5], [100, 14], [106, 10.5], [110, -7.5], [120.5, 23], [146, -17.5], [-93, 17.5], [-77.3, 18.1]]}, {"k": "rub", "n": "天然ゴム", "s": "ゴ", "c": "#4a4a4a", "p": [[100.5, 7.5], [103, 16], [102, 4.5], [103, -2], [100.5, 0.5], [112, -2], [107, 11.5], [106, 12.5], [103, 19], [80.3, 6.8], [76.5, 9.5], [-9.5, 6.5], [6, 6.5], [-6, 5.5], [109.7, 19.2], [97.5, 16.5], [98, 12]]}, {"k": "oil", "n": "油やし", "s": "油", "c": "#e07a1f", "p": [[102.5, 3.5], [117, 5], [101.5, 1], [104, -2.5], [111, -1.5], [7, 5.5], [-2, 5.5], [10.5, 4], [24, 0], [11.5, -0.5], [-4.5, 5.5], [-73.5, 8], [-79.5, 0.5], [-48, -2], [99, 8], [150.5, -5.5], [-87, 15.5], [-83.5, 9.5], [2.5, 7], [14, -8]]}, {"k": "coc", "n": "ココやし", "s": "ヤ", "c": "#1f8fb0", "p": [[125, 9], [122, 13.5], [110, -7.5], [96.5, 3], [80, 7.5], [76.3, 10], [99.5, 9.5], [145, -5], [167, -16], [178, -17.5], [35, -17], [39.3, -6.5], [-4, 5.2], [-38, -10], [-102, 17.5], [-150, -17.5], [173, 1.5], [73.5, 4], [-172, -13.6], [106.5, 10], [119, -1]]}, {"k": "sug", "n": "さとうきび", "s": "糖", "c": "#c2185b", "p": [[-48, -21.5], [-35.5, -8.5], [79, 27], [75, 18], [78.5, 11], [108.5, 23], [113, 23.5], [101, 24], [101, 15.5], [148, -20], [-79.5, 22], [-96.5, 19], [-76.4, 3.5], [72, 30.5], [123, 10.2], [112.5, -7.8], [57.5, -20.2], [31, -28.8], [32.7, 25.7], [-91.5, 30.2], [-80.8, 26.6], [-91, 14.2], [-65.2, -27], [-79, -7.5], [34.7, -0.1]]}, {"k": "cot", "n": "綿花", "s": "綿", "c": "#6a6ad0", "p": [[72, 22], [77, 20.5], [74.5, 30.5], [79, 16], [68.5, 26], [82, 41], [86, 44], [80, 38.5], [115, 36.5], [113, 34], [117, 31], [66, 40.5], [62, 41], [-101.5, 33.5], [-90.5, 33.5], [-120, 36.5], [-83.5, 31.8], [-112, 33], [-55, -13], [-45, -12.5], [31, 30.5], [35.5, 37], [150, -29.5], [-6, 12], [-3.5, 11.5], [-60, -27], [22.5, 39.5], [60, 38]]}, {"k": "jut", "n": "ジュート", "s": "ジ", "c": "#b8860b", "p": [[89.5, 23.7], [90.4, 24.5], [89, 25.5], [91, 23.5], [88, 23.5], [86.5, 25.8], [91, 26], [85.5, 20.5], [86, 26.5]]}];
 var cropSel = {};
 function drawMarks(ctx, list, sel){
-  var svg = ctx.svg, g = svgEl("g", {"class":"layer-ov", "style":"pointer-events:none"});
+  var svg = ctx.svg, g = svgEl("g", {"class":"layer-ov mk", "style":"pointer-events:none"});
   list.forEach(function(c){
     if(!sel[c.k]) return;
     c.p.forEach(function(q){
@@ -846,7 +869,7 @@ var lineSel = {};
 var LINE_REG = {p1000:["sas","ea"], p500:["sas","ea"], qh:["ea"], w100:["na"], grape:["eu"], wheat:["eu"]};
 function lineOk(k, ctx){ return (LINE_REG[k]||[]).indexOf(ctx.key)>=0; }
 function drawLines(ctx){
-  var svg = ctx.svg, w = ctx.w, h = ctx.h, g = svgEl("g", {"class":"layer-ov", "style":"pointer-events:none"});
+  var svg = ctx.svg, w = ctx.w, h = ctx.h, g = svgEl("g", {"class":"layer-ov mk", "style":"pointer-events:none"});
   function inside(a){ return a[0]>-20 && a[0]<w+20 && a[1]>-20 && a[1]<h+20; }
   LINES.forEach(function(L){
     if(!lineSel[L.k] || !lineOk(L.k, ctx)) return;
@@ -901,7 +924,143 @@ function chipKeys(){ return state.mode==="country" ? ANS_ORDER : REGION_ORDER; }
 function chipLabel(k){ return state.mode==="country" ? k : REGIONS[k].n; }
 function groupOf(c){ return state.mode==="country" ? c.c : c.g; }
 
-var screens = ["start","quiz","result","atlas"];
+
+/* ---------- 凡例クイズ(分布地図): 1つの区分だけ塗った地図から区分名を当てる ---------- */
+var LQ = (function(){
+  var GENRES = ["rel","lang","fam","eth","agr","col","gni","clim"];
+  var gSel = {}, rSel = {}; GENRES.forEach(function(g){ gSel[g] = true; });
+  function regions(){ return ["wd"].concat(REGION_ORDER); }
+  regions().forEach(function(r){ rSel[r] = true; });
+  var S = {n:0, idx:0, score:0, answered:false, ctx:null};
+  function shuf(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function gLabel(g){ return LAYERS[g] ? LAYERS[g].label : g; }
+  function buildChips(){
+    var gb = $("lg-genres"); gb.innerHTML = "";
+    GENRES.forEach(function(g){
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip";
+      b.setAttribute("aria-pressed", gSel[g] ? "true":"false"); b.textContent = gLabel(g);
+      b.addEventListener("click", function(){ gSel[g] = !gSel[g]; b.setAttribute("aria-pressed", gSel[g] ? "true":"false"); refreshStart(); });
+      gb.appendChild(b);
+    });
+    var rb = $("lg-regions"); rb.innerHTML = "";
+    regions().forEach(function(r){
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip";
+      b.setAttribute("aria-pressed", rSel[r] ? "true":"false"); b.textContent = REGIONS[r].n;
+      b.addEventListener("click", function(){ rSel[r] = !rSel[r]; b.setAttribute("aria-pressed", rSel[r] ? "true":"false"); refreshStart(); });
+      rb.appendChild(b);
+    });
+  }
+  /* 地図にしっかり映っている区分だけを出題対象にする(端にわずかに見える区分は除く) */
+  function visArea(bb, ctx){
+    if(!bb) return 0;
+    var x1 = Math.max(bb.x,0), y1 = Math.max(bb.y,0), x2 = Math.min(bb.x+bb.width, ctx.w), y2 = Math.min(bb.y+bb.height, ctx.h);
+    if(x2<=x1 || y2<=y1) return 0;
+    var vis = (x2-x1)*(y2-y1);
+    return vis/(bb.width*bb.height) >= 0.6 ? vis : 0;
+  }
+  function presentClasses(ctx, L){
+    var col2cls = {}, area = {};
+    L.classes.forEach(function(c){ col2cls[c[2]] = c[0]; area[c[0]] = 0; });
+    Array.prototype.forEach.call(ctx.svg.querySelectorAll(".datamaps-subunit"), function(p){
+      var cls = L.map[isoOf(p)]; if(!cls) return;
+      var bb; try{ bb = p.getBBox(); }catch(e){ return; }
+      area[cls] += visArea(bb, ctx);
+    });
+    Array.prototype.forEach.call(ctx.svg.querySelectorAll("g[clip-path] > path"), function(p){
+      var c = col2cls[p.getAttribute("fill")]; if(!c) return;
+      var bb = null;
+      try{
+        var m = /url\(#([^)]+)\)/.exec(p.parentNode.getAttribute("clip-path") || "");
+        var cp = m && ctx.svg.querySelector("#" + m[1] + " > *");
+        bb = cp ? cp.getBBox() : p.getBBox();
+      }catch(e){ return; }
+      area[c] += visArea(bb, ctx);
+    });
+    var min = ctx.w*ctx.h*0.03;
+    return L.classes.filter(function(c){ return area[c[0]] >= min; });
+  }
+  function start(){
+    var n = state.count>0 ? state.count : 10;
+    S.n = n; S.idx = 0; S.score = 0;
+    show("lq");
+    question();
+  }
+  function question(){
+    S.answered = false;
+    var combos = [];
+    GENRES.forEach(function(g){ if(gSel[g]) regions().forEach(function(r){ if(rSel[r]) combos.push([g,r]); }); });
+    combos = shuf(combos);
+    var done = false;
+    for(var t=0; t<combos.length && t<8 && !done; t++){
+      var g = combos[t][0], r = combos[t][1], L = LAYERS[g];
+      var ctx = buildMap($("lmap"), r, null);
+      if(!ctx || !ctx.datamap){ continue; }
+      var present = paintLayer(ctx, g);
+      var classes = presentClasses(ctx, L);
+      if(classes.length<2) continue;
+      var target = classes[Math.floor(Math.random()*classes.length)];
+      Array.prototype.forEach.call(ctx.svg.querySelectorAll(".datamaps-subunit"), function(p){
+        if(L.map[isoOf(p)]===target[0]) return;
+        p.style.setProperty("fill","#ffffff","important"); p.style.setProperty("stroke","#ffffff","important");
+      });
+      Array.prototype.forEach.call(ctx.svg.querySelectorAll("g[clip-path] > path"), function(p){
+        if(p.getAttribute("fill")===target[2]) return;
+        p.style.setProperty("fill","#ffffff","important"); p.style.setProperty("stroke","#ffffff","important");
+      });
+      S.ctx = ctx; S.g = g; S.target = target; S.classes = classes;
+      done = true;
+    }
+    $("lq-progress").textContent = (S.idx+1) + " / " + S.n;
+    $("lq-score").textContent = "正解 " + S.score;
+    $("lq-bar").style.width = (S.idx/S.n*100) + "%";
+    $("lq-legend").innerHTML = ""; $("lq-fb").textContent = ""; $("lq-next").hidden = true;
+    if(!done){
+      $("lq-title").textContent = ""; $("lq-q").textContent = "出題できる組み合わせがありません。地図データを読み込めていないか、選んだ分布・地域に区分が足りません。設定に戻って選び直してください。";
+      $("lq-opts").innerHTML = ""; return;
+    }
+    $("lq-title").textContent = gLabel(S.g) + "・" + REGIONS[S.ctx.key].n;
+    $("lq-q").textContent = "地図に色が塗られている「" + gLabel(S.g) + "」の区分は、どれですか？";
+    var others = shuf(S.classes.filter(function(c){ return c[0]!==S.target[0]; })).slice(0,3);
+    var opts = shuf(others.concat([S.target])), box = $("lq-opts"); box.innerHTML = "";
+    opts.forEach(function(c){
+      var b = document.createElement("button"); b.type = "button"; b.className = "lq-opt"; b.setAttribute("data-c", c[0]); b.textContent = c[1];
+      b.addEventListener("click", function(){ answer(b); });
+      box.appendChild(b);
+    });
+  }
+  function answer(b){
+    if(S.answered) return; S.answered = true;
+    var ok = b.getAttribute("data-c")===S.target[0]; if(ok) S.score++;
+    Array.prototype.forEach.call($("lq-opts").querySelectorAll(".lq-opt"), function(o){ if(o.getAttribute("data-c")===S.target[0]) o.classList.add("ok"); });
+    if(!ok) b.classList.add("ng");
+    $("lq-fb").textContent = (ok ? "正解です。" : "不正解です。") + "塗られていたのは「" + S.target[1] + "」です。";
+    $("lq-score").textContent = "正解 " + S.score;
+    var present = paintLayer(S.ctx, S.g), L = LAYERS[S.g];
+    var lg = '<div class="llegend">' + L.classes.filter(function(c){ return S.classes.some(function(x){ return x[0]===c[0]; }); }).map(function(c){
+      return '<span><i style="background:' + c[2] + '"></i>' + esc(c[1]) + '</span>';
+    }).join("") + '</div>';
+    $("lq-legend").innerHTML = lg;
+    $("lq-bar").style.width = ((S.idx+1)/S.n*100) + "%";
+    $("lq-next").textContent = S.idx+1>=S.n ? "結果を見る" : "次の問題"; $("lq-next").hidden = false;
+  }
+  function next(){
+    if(S.idx+1>=S.n){
+      $("lq-opts").innerHTML = ""; $("lq-legend").innerHTML = "";
+      $("lq-q").textContent = "結果:" + S.n + "問中 " + S.score + "問正解";
+      $("lq-fb").textContent = S.score===S.n ? "全問正解です。" : "間違えた区分は、地図の凡例を見直しておきましょう。";
+      $("lq-next").textContent = "設定に戻る"; S.idx = S.n; return;
+    }
+    S.idx++; question();
+  }
+  $("lq-next").addEventListener("click", function(){
+    if(S.idx>=S.n){ refreshStart(); show("start"); return; }
+    next();
+  });
+  $("lq-quit").addEventListener("click", function(){ refreshStart(); show("start"); });
+  return {genres:GENRES, gSel:gSel, rSel:rSel, regions:regions, buildChips:buildChips, start:start};
+})();
+
+var screens = ["start","quiz","result","atlas","lq"];
 function show(name){
   screens.forEach(function(s){ $("screen-"+s).hidden = (s!==name); });
   window.scrollTo(0,0);
@@ -925,6 +1084,16 @@ function buildChips(){
   });
 }
 function refreshStart(){
+  var isL = state.mode==="legend";
+  $("lg-block").hidden = !isL;
+  $("region-h2").hidden = isL; $("region-chips").hidden = isL; $("all-p").hidden = isL;
+  if(isL){
+    $("src-block").hidden = true; $("start-weak").hidden = true;
+    var ng = LQ.genres.filter(function(g){ return LQ.gSel[g]; }).length, nr = LQ.regions().filter(function(r){ return LQ.rSel[r]; }).length;
+    $("start").disabled = !(ng && nr);
+    $("start").textContent = "スタート";
+    return;
+  }
   var isC = state.mode==="country";
   var total = items().filter(function(c){ return inScope(c) && state.regions[groupOf(c)]; }).length;
   $("start").disabled = total===0;
@@ -956,7 +1125,7 @@ Array.prototype.forEach.call($("mode-seg").querySelectorAll("button"), function(
     Array.prototype.forEach.call($("mode-seg").querySelectorAll("button"), function(x){
       x.setAttribute("aria-pressed", x===b ? "true":"false");
     });
-    buildChips(); refreshStart();
+    buildChips(); LQ.buildChips(); refreshStart();
   });
 });
 Array.prototype.forEach.call($("count-seg").querySelectorAll("button"), function(b){
@@ -1157,7 +1326,7 @@ function ownProjection(reg, w, h, k){
   var cm = m(reg.c[1]);
   return function(lo, la){ var d = ((lo-reg.c[0]+180)%360+360)%360-180; return [w/2 + s*d*rad, h/2 - s*(m(la)-cm)]; };
 }
-var mapCtx = null, mapApply = null, lastLayer = "";
+var mapCtx = null, mapApply = null, lastLayer = "", atlasApply = null;
 
 /* 地図を作る。box:描画先、regionKey:11地域のキー、city:点を打つ項目(なければ点なし) */
 function buildMap(box, regionKey, city){
@@ -1459,14 +1628,22 @@ function insetPaths(svg, isos){
   Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){ if(isos.indexOf(isoOf(p))>=0 || isos.indexOf(p.getAttribute("data-in"))>=0) out.push(p); });
   return out;
 }
+/* 色の境目に白い線(すき間)が出ないよう、塗り色と同じ色で縁取る */
+function inFill(p, c){
+  p.style.setProperty("fill", c, "important");
+  p.style.setProperty("stroke", c, "important");
+  p.style.setProperty("stroke-width", "1.6px", "important");
+  p.style.setProperty("stroke-dasharray", "none", "important");
+  p.style.setProperty("stroke-linecap", "butt", "important");
+}
 function paintInset(ctx, sp){
   var svg = ctx.svg;
   var fills = sp.fills || (function(){ var o = {}; o[sp.iso] = sp.base; return o; })();
   var all = Object.keys(fills), own = [];
   Array.prototype.forEach.call(svg.querySelectorAll(".datamaps-subunit"), function(p){
     var iso = isoOf(p);
-    if(fills[iso]){ own.push(p); p.style.setProperty("fill", fills[iso], "important"); }
-    else p.style.setProperty("fill", IN_OTHER, "important");
+    if(fills[iso]){ own.push(p); inFill(p, fills[iso]); }
+    else inFill(p, IN_OTHER);
   });
   /* 国コードが分からない領域(コソボなど)は、地図上の位置からその領域を探して塗る */
   (sp.pathAt||[]).forEach(function(pa){
@@ -1481,7 +1658,7 @@ function paintInset(ctx, sp){
     });
     if(hit){
       hit.setAttribute("data-in", pa[3]);
-      hit.style.setProperty("fill", pa[2], "important");
+      inFill(hit, pa[2]);
       if(own.indexOf(hit)<0) own.push(hit);
     }
   });
@@ -1490,10 +1667,10 @@ function paintInset(ctx, sp){
     var ps = insetPaths(svg, sb[2] || all); if(!ps.length) return;
     var id = "clip-in-" + sp.key + "-" + i;
     var cl = svgEl("clipPath", {id:id, "class":"layer-ov"});
-    ps.forEach(function(p){ cl.appendChild(svgEl("path", {d:p.getAttribute("d")})); });
+    sb[1].forEach(function(poly){ cl.appendChild(svgEl("path", {d:polyD(ctx, poly)})); });
     svg.appendChild(cl);
     var g = svgEl("g", {"class":"layer-ov", "clip-path":"url(#"+id+")"});
-    sb[1].forEach(function(poly){ g.appendChild(svgEl("path", {d:polyD(ctx, poly), fill:sb[0], stroke:"none"})); });
+    ps.forEach(function(p){ g.appendChild(svgEl("path", {d:p.getAttribute("d"), fill:sb[0], stroke:sb[0], "stroke-width":1.6, "stroke-dasharray":"none"})); });
     svg.appendChild(g);
   });
   own.forEach(function(p){ svg.appendChild(svgEl("path", {d:p.getAttribute("d"), fill:"none", stroke:"#4b5a65", "stroke-width":(sp.bw||1.0), "stroke-dasharray":(sp.bdash||""), "class":"layer-ov"})); });
@@ -1662,6 +1839,7 @@ function openAtlas(){
   show("atlas");
   buildAtlasChips();
   var apply = mountLayers($("atlas-layers"), function(){ return mapCtx; });
+  atlasApply = apply;
   mapRebuild = function(){ mapCtx = buildMap($("amap"), atlasKey, null); apply(); };
   lastAvail = Math.floor($("amap").parentElement.clientWidth);
   mapRebuild();
@@ -1691,7 +1869,7 @@ function finish(){
   show("result");
 }
 
-$("start").addEventListener("click", function(){ startQuiz(false); });
+$("start").addEventListener("click", function(){ if(state.mode==="legend") LQ.start(); else startQuiz(false); });
 $("open-atlas").addEventListener("click", openAtlas);
 $("atlas-back").addEventListener("click", function(){ show("start"); });
 $("start-weak").addEventListener("click", function(){ startQuiz(true); });
@@ -1700,7 +1878,7 @@ $("r-weak").addEventListener("click", function(){ startQuiz(true); });
 $("r-home").addEventListener("click", function(){ buildChips(); refreshStart(); show("start"); });
 
 buildChips();
-refreshStart();
+LQ.buildChips(); refreshStart();
 /* ---------- ライト/ダーク切り替え ---------- */
 (function(){
   var root = document.documentElement, btn = document.getElementById("theme-btn");
@@ -1721,5 +1899,8 @@ refreshStart();
   if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", label); }catch(e){} }
 })();
 
+
 })();
 </script>
+
+</body></html>
